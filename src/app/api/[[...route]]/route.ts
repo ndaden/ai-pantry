@@ -1,19 +1,22 @@
 import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
+import { swagger } from "@elysiajs/swagger";
+import { aiModule } from "./modules/ai";
 
 const app = new Elysia({ prefix: "/api" })
+  .use(swagger({ provider: "swagger-ui" }))
   .get("/", () => "Hello from Elysia")
-  .use(bearer())
+  /* .use(bearer())
   .onBeforeHandle(async ({ bearer, set }) => {
     if (!bearer) return (set.status = "Unauthorized");
     const isAuthorized = bearer === "12345678";
     if (!isAuthorized) {
       return (set.status = "Unauthorized");
     }
-  })
+  }) */
   .post(
     "/sign",
-    ({ bearer, body }) => {
+    ({ body }) => {
       return body;
     },
     {
@@ -22,7 +25,8 @@ const app = new Elysia({ prefix: "/api" })
         password: t.String(),
       }),
     }
-  );
+  )
+  .use(aiModule);
 
 export type App = typeof app;
 

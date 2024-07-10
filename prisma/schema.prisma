@@ -9,6 +9,32 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model Product {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId   String       @db.ObjectId
+  category     Category     @relation(fields: [categoryId], references: [id])
+  label        String
+  quantity     Int
+  quantityUnit QuantityUnit
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime?
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  label     String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+enum QuantityUnit {
+  Piece    @map("piece")
+  Box      @map("box")
+  Kilogram @map("kilogram")
+  Liter    @map("liter")
 }

@@ -1,19 +1,22 @@
-import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { aiModule } from "./modules/ai";
+import { pantryModule } from "./modules/pantry";
+import { PrismaClient } from "@prisma/client";
 
+// create a new Prisma Client instance
+const prisma = new PrismaClient({
+  log: ["info", "warn", "error"],
+});
+
+// create a new Elysia instance and pass DB as context
 const app = new Elysia({ prefix: "/api" })
+  .decorate("db", prisma)
   .use(swagger({ provider: "swagger-ui" }))
-  .get("/", () => "Hello from Elysia")
-  /* .use(bearer())
-  .onBeforeHandle(async ({ bearer, set }) => {
-    if (!bearer) return (set.status = "Unauthorized");
-    const isAuthorized = bearer === "12345678";
-    if (!isAuthorized) {
-      return (set.status = "Unauthorized");
-    }
-  }) */
+  .get("/", ({ db }) => {
+    db.product.findMany();
+    return "Hello from Elysia";
+  })
   .post(
     "/sign",
     ({ body }) => {
@@ -26,6 +29,7 @@ const app = new Elysia({ prefix: "/api" })
       }),
     }
   )
+  .use(pantryModule)
   .use(aiModule);
 
 export type App = typeof app;

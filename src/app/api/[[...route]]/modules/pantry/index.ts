@@ -1,6 +1,7 @@
+import { Category } from "@/lib/types/Category";
+import { Product } from "@/lib/types/Product";
 import { PrismaClient } from "@prisma/client";
 import Elysia, { t } from "elysia";
-import { Category, Product } from "./types";
 
 type App = Elysia<
   "",
@@ -47,7 +48,14 @@ export const pantryModule = (app: App) =>
     .group("/category", (app) =>
       app
         .get("/list", ({ db }) => {
-          return db.category.findMany();
+          return db.category.findMany({
+            select: {
+              id: true,
+              label: true,
+              createdAt: false,
+              updatedAt: false,
+            },
+          });
         })
         .post("/add", async ({ body, db }) => {
           return db.category.create({

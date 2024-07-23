@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import axios, { AxiosProgressEvent } from "axios";
 
 interface UploadResponse {
@@ -12,16 +12,16 @@ const useUploadFile = ({
   onUploadFinished,
 }: {
   setUploadProgress: Dispatch<SetStateAction<number>>;
-  onUploadFinished: () => void;
+  onUploadFinished: (data: UploadResponse) => void;
 }) => {
   const uploadFileMutation = useMutation<UploadResponse, Error, File>({
     mutationFn: (file: File) =>
       uploadFile(file, (progress) => {
         setUploadProgress(progress);
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       setUploadProgress(100);
-      onUploadFinished();
+      onUploadFinished(data);
     },
     onError: () => {
       setUploadProgress(0);

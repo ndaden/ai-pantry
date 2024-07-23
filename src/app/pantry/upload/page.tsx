@@ -6,7 +6,7 @@ import useUploadFile from "@/lib/hooks/useUploadFile";
 import { cn } from "@/lib/utils";
 import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
 
 const Page = () => {
@@ -38,9 +38,10 @@ const Page = () => {
 
   const uploadFileMutation = useUploadFile({
     setUploadProgress,
-    onUploadFinished: () => {
+    onUploadFinished: (data) => {
       startTransition(() => {
-        route.push("/pantry/add");
+        sessionStorage.setItem("ai-data", JSON.stringify(data));
+        route.push("/pantry/list/preview");
       });
     },
   });
@@ -73,7 +74,7 @@ const Page = () => {
               className="h-full w-full flex-1 flex flex-col items-center justify-center"
               {...getRootProps()}
             >
-              <input {...getInputProps()} />
+              <input {...getInputProps()} accept="image/*" />
               {isDragOver ? (
                 <MousePointerSquareDashed className="h-6 w-6 text-zinc-500 mb-2" />
               ) : isUploading || isPending ? (

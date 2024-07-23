@@ -62,7 +62,7 @@ const PantryForm = () => {
     isPendingAddProduct,
     categories,
     isLoadingCategories,
-  } = useProductController();
+  } = useProductController({ refreshProductList: () => Promise.resolve() });
 
   const form = useForm<z.infer<typeof pantryFormSchema>>({
     resolver: zodResolver(pantryFormSchema),

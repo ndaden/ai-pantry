@@ -25,7 +25,7 @@ export const pantryModule = (app: App) =>
               label: true,
               quantity: true,
               quantityUnit: true,
-              categoryId: false,
+              categoryId: true,
               category: { select: { label: true } },
             },
           });

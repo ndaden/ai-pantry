@@ -1,6 +1,5 @@
 "use client";
 
-import { client } from "@/app/page";
 import Dialog from "@/components/Dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,51 +14,33 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useProductController from "@/lib/hooks/useProductController";
-import { ProductView } from "@/lib/types/ProductView";
+import { useToast } from "@/components/ui/use-toast";
 import { ChevronDownIcon } from "lucide-react";
+import { AiProduct } from "./page";
 
-const Product = ({
-  product,
-  refreshProductList,
-}: {
-  product: ProductView;
-  refreshProductList: () => Promise<void>;
-}) => {
-  const { updateProductMutation, isPendingUpdateProduct } =
-    useProductController({ refreshProductList });
+const AiSuggestedProduct = ({ product }: { product: AiProduct }) => {
+  const { toast } = useToast();
 
-  const addQuantityHandler = (product: ProductView) => {
-    updateProductMutation({
-      id: product.id,
-      categoryId: product.categoryId,
-      label: product.label,
-      quantity: product.quantity + 1,
-      quantityUnit: product.quantityUnit,
+  const addQuantityHandler = (label: string, unit: string) => {
+    toast({
+      title: `${label}: 1 ${unit} ajouté !`,
+      variant: "default",
     });
   };
 
-  const deleteProductHandler = (id: string) => {
-    client.api.product({ id }).delete();
-    refreshProductList();
-  };
-
-  const subtractQuantityHandler = (product: ProductView) => {
-    if (product.quantity > 1) {
-      updateProductMutation({
-        id: product.id,
-        categoryId: product.categoryId,
-        label: product.label,
-        quantity: product.quantity - 1,
-        quantityUnit: product.quantityUnit,
-      });
-    }
+  const subtractQuantityHandler = (label: string, unit: string) => {
+    toast({
+      title: `${label}: 1 ${unit} supprimé !`,
+      variant: "default",
+    });
   };
   return (
-    <Card key={product.id} className="relative my-1 p-0 bg-green-100/50">
+    <Card className="relative my-1 p-0 bg-green-100/50">
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
-          <CardTitle>{product.label}</CardTitle>
+          <CardTitle>
+            {product.label} - {product.category}
+          </CardTitle>
           <CardDescription>
             {product.quantity} {product.quantityUnit}
           </CardDescription>
@@ -68,14 +49,14 @@ const Product = ({
           <Button
             variant={"ghost"}
             className="text-3xl p-2"
-            onClick={() => subtractQuantityHandler(product)}
+            onClick={() => subtractQuantityHandler(product.label, " pieces")}
           >
             -
           </Button>
           <Button
             variant={"ghost"}
             className="text-3xl p-2"
-            onClick={() => addQuantityHandler(product)}
+            onClick={() => addQuantityHandler(product.label, " pieces")}
           >
             +
           </Button>
@@ -90,7 +71,7 @@ const Product = ({
               <DropdownMenuItem asChild>
                 <Dialog
                   message="Voulez vous vraiment supprimer"
-                  onConfirm={() => deleteProductHandler(product.id)}
+                  onConfirm={() => {}}
                 >
                   <Button>Supprimer</Button>
                 </Dialog>
@@ -103,4 +84,4 @@ const Product = ({
   );
 };
 
-export default Product;
+export default AiSuggestedProduct;

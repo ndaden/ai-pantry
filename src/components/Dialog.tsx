@@ -13,9 +13,11 @@ import {
 const Dialog = ({
   children,
   message,
+  onConfirm,
 }: {
   children: ReactNode;
   message: string;
+  onConfirm: (p?: any) => void;
 }) => {
   return (
     <AlertDialog>
@@ -26,7 +28,7 @@ const Dialog = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Annuler</AlertDialogCancel>
-          <AlertDialogAction>Confirmer</AlertDialogAction>
+          <AlertDialogAction onClick={onConfirm}>Confirmer</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

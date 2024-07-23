@@ -1,9 +1,11 @@
 import { CategoryView } from "./CategoryView";
+import { QuantityUnit } from "./QuantityUnit";
 
 export interface ProductView {
   id: string;
   label: string;
+  categoryId: string;
   category: CategoryView;
-  quantityUnit: string;
+  quantityUnit: QuantityUnit;
   quantity: number;
 }

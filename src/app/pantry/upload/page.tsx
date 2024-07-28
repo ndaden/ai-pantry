@@ -8,6 +8,10 @@ import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
+import { AiProduct } from "../list/preview/page";
+// @ts-ignore
+import { v4 as uuidv4 } from "uuid";
+import { SESSION_STORAGE_AI_DATA_KEY } from "@/app/appConstants";
 
 const Page = () => {
   const { toast } = useToast();
@@ -40,7 +44,16 @@ const Page = () => {
     setUploadProgress,
     onUploadFinished: (data) => {
       startTransition(() => {
-        sessionStorage.setItem("ai-data", JSON.stringify(data));
+        const aiProducts: AiProduct[] = (data as unknown as AiProduct[]).map(
+          (p) => {
+            return { ...p, id: uuidv4() };
+          }
+        );
+
+        sessionStorage.setItem(
+          SESSION_STORAGE_AI_DATA_KEY,
+          JSON.stringify(aiProducts)
+        );
         route.push("/pantry/list/preview");
       });
     },

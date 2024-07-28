@@ -14,32 +14,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
 import { ChevronDownIcon } from "lucide-react";
 import { AiProduct } from "./page";
 
-const AiSuggestedProduct = ({ product }: { product: AiProduct }) => {
-  const { toast } = useToast();
-
-  const addQuantityHandler = (label: string, unit: string) => {
-    toast({
-      title: `${label}: 1 ${unit} ajouté !`,
-      variant: "default",
-    });
-  };
-
-  const subtractQuantityHandler = (label: string, unit: string) => {
-    toast({
-      title: `${label}: 1 ${unit} supprimé !`,
-      variant: "default",
-    });
-  };
+const AiSuggestedProduct = ({
+  product,
+  onAddQuantity,
+  onSubtractQuantity,
+  onDeleteProduct,
+}: {
+  product: AiProduct;
+  onAddQuantity: (p: AiProduct) => void;
+  onSubtractQuantity: (p: AiProduct) => void;
+  onDeleteProduct: (p: AiProduct) => void;
+}) => {
   return (
     <Card className="relative my-1 p-0 bg-green-100/50">
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
           <CardTitle>
-            {product.label} - {product.category}
+            {product.id} - {product.label} - {product.category}
           </CardTitle>
           <CardDescription>
             {product.quantity} {product.quantityUnit}
@@ -49,14 +43,14 @@ const AiSuggestedProduct = ({ product }: { product: AiProduct }) => {
           <Button
             variant={"ghost"}
             className="text-3xl p-2"
-            onClick={() => subtractQuantityHandler(product.label, " pieces")}
+            onClick={() => onSubtractQuantity(product)}
           >
             -
           </Button>
           <Button
             variant={"ghost"}
             className="text-3xl p-2"
-            onClick={() => addQuantityHandler(product.label, " pieces")}
+            onClick={() => onAddQuantity(product)}
           >
             +
           </Button>
@@ -71,7 +65,7 @@ const AiSuggestedProduct = ({ product }: { product: AiProduct }) => {
               <DropdownMenuItem asChild>
                 <Dialog
                   message="Voulez vous vraiment supprimer"
-                  onConfirm={() => {}}
+                  onConfirm={onDeleteProduct}
                 >
                   <Button>Supprimer</Button>
                 </Dialog>

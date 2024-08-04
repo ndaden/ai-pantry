@@ -33,7 +33,7 @@ const AiSuggestedProduct = ({
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
           <CardTitle>
-            {product.id} - {product.label} - {product.category}
+            {product.label} - {product.category}
           </CardTitle>
           <CardDescription>
             {product.quantity} {product.quantityUnit}
@@ -65,7 +65,7 @@ const AiSuggestedProduct = ({
               <DropdownMenuItem asChild>
                 <Dialog
                   message="Voulez vous vraiment supprimer"
-                  onConfirm={onDeleteProduct}
+                  onConfirm={() => onDeleteProduct(product)}
                 >
                   <Button>Supprimer</Button>
                 </Dialog>

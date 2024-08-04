@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { ReactNode } from "react";
 import {
   AlertDialog,
@@ -9,30 +10,36 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import React from "react";
 
-const Dialog = ({
-  children,
-  message,
-  onConfirm,
-}: {
-  children: ReactNode;
-  message: string;
-  onConfirm: (p?: any) => void;
-}) => {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{message}</AlertDialogTitle>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Annuler</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Confirmer</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-};
+const Dialog = React.forwardRef(
+  (
+    {
+      children,
+      message,
+      onConfirm,
+    }: {
+      children: ReactNode;
+      message: string;
+      onConfirm: (p?: any) => void;
+    },
+    ref
+  ) => {
+    return (
+      <AlertDialog>
+        <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+        <AlertDialogContent aria-description={message} ref={ref}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{message}</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirm}>Confirmer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
+  }
+);
 
 export default Dialog;

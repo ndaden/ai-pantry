@@ -12,7 +12,7 @@ const PantryList = async () => {
   const refreshProductList = async () => {
     "use server";
 
-    revalidatePath("/pantry/list", "page");
+    revalidatePath("/pantry/list", "layout");
   };
 
   return data && data.length > 0 ? (

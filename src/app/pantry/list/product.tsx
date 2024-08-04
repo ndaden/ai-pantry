@@ -81,18 +81,18 @@ const Product = ({
           </Button>
 
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="">
+            <DropdownMenuTrigger asChild>
               <Button variant={"ghost"} className="p-2">
                 <ChevronDownIcon size={20} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem className="p-0" asChild>
                 <Dialog
                   message="Voulez vous vraiment supprimer"
                   onConfirm={() => deleteProductHandler(product.id)}
                 >
-                  <Button>Supprimer</Button>
+                  <Button className="w-full">Supprimer</Button>
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>

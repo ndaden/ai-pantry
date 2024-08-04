@@ -1,3 +1,4 @@
+import { AiProduct } from "@/app/pantry/list/preview/page";
 import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
 import { PrismaClient } from "@prisma/client";
@@ -31,9 +32,35 @@ export const pantryModule = (app: App) =>
           });
         })
         .post("/add", async ({ body, db }) => {
+          if (Array.isArray(body)) {
+            return db.product.createMany({ data: body as Product[] });
+          }
+
           return db.product.create({
             data: body as Product,
           });
+        })
+        .post("/ai-add", async ({ body, db }) => {
+          const products = body as AiProduct[];
+
+          const productsToCreate: Product[] = await Promise.all(
+            products.map(async (product) => {
+              const category = await db.category.findFirst({
+                where: {
+                  label: { equals: product.category },
+                },
+              });
+
+              return {
+                categoryId: category?.id,
+                label: product.label,
+                quantity: product.quantity,
+                quantityUnit: product.quantityUnit,
+              } as Product;
+            })
+          );
+
+          return db.product.createMany({ data: productsToCreate });
         })
         .put("/:id", ({ db, body, params }) => {
           return db.product.update({
@@ -54,6 +81,13 @@ export const pantryModule = (app: App) =>
               label: true,
               createdAt: false,
               updatedAt: false,
+            },
+          });
+        })
+        .get("/find/:categoryName", ({ db, params }) => {
+          return db.category.findFirst({
+            where: {
+              label: { equals: params.categoryName },
             },
           });
         })

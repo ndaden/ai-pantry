@@ -3,6 +3,7 @@ import { Product } from "../types/Product";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { AiProduct } from "@/app/pantry/list/preview/page";
 
 const useProductController = ({
   refreshProductList,
@@ -11,9 +12,21 @@ const useProductController = ({
 }) => {
   const { toast } = useToast();
   const route = useRouter();
-  const addProduct = async (product: Product) => {
+  const addProduct = async (product: Product | Product[]) => {
     try {
       const { data, error } = await client.api.product.add.post(product);
+      if (error) {
+        throw error;
+      }
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const addAiProduct = async (product: AiProduct[]) => {
+    try {
+      const { data, error } = await client.api.product["ai-add"].post(product);
       if (error) {
         throw error;
       }
@@ -49,12 +62,27 @@ const useProductController = ({
       onError: (error) => alert(error.message),
       onSuccess: (data) => {
         toast({
-          title: "Votre produit a été ajouté",
+          title: "Votre produit a été ajouté.",
           variant: "default",
         });
         route.push("/pantry/list");
       },
     });
+
+  const {
+    mutate: addAiProductsMutation,
+    isPending: isPendingAddAiProductsMutation,
+  } = useMutation({
+    mutationFn: addAiProduct,
+    onError: (error) => alert(error.message),
+    onSuccess: (data) => {
+      toast({
+        title: "Vos produits ont été ajoutés avec succés.",
+        variant: "default",
+      });
+      route.push("/pantry/list");
+    },
+  });
 
   const { mutate: updateProductMutation, isPending: isPendingUpdateProduct } =
     useMutation({
@@ -73,6 +101,8 @@ const useProductController = ({
     categories,
     isLoadingCategories,
     addProductMutation,
+    addAiProductsMutation,
+    isPendingAddAiProductsMutation,
     isPendingAddProduct,
     updateProductMutation,
     isPendingUpdateProduct,

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
-    fetch: { cache: "no-store" },
+    fetch: { cache: "no-store", credentials: "include" },
   });
 
   const refreshProductList = async () => {

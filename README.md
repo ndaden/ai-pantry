@@ -15,5 +15,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 When updating prisma models, run the following command to push them to database
 
 ```bash
+bunx prisma generate
+
 bunx prisma db push
 ```

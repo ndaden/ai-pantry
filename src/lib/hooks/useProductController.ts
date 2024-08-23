@@ -12,6 +12,7 @@ const useProductController = ({
 }) => {
   const { toast } = useToast();
   const route = useRouter();
+
   const addProduct = async (product: Product | Product[]) => {
     try {
       const { data, error } = await client.api.product.add.post(product);

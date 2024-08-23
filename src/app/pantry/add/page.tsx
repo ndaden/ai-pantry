@@ -24,11 +24,13 @@ import {
 } from "lucide-react";
 import { QuantityUnit } from "@/lib/types/QuantityUnit";
 import { Product } from "@/lib/types/Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QUANTITIES, UNITS } from "./constants";
 import useProductController from "@/lib/hooks/useProductController";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 
 const pantryFormSchema = z.object({
+  userId: z.string(),
   label: z.string().min(3).max(50),
   categoryId: z.string().min(24), // ObjectId
   quantityUnit: z.nativeEnum(QuantityUnit),
@@ -55,6 +57,7 @@ const CATEGORY_ICON = [
 ] as const;
 
 const PantryForm = () => {
+  const { user } = useKindeAuth();
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {
@@ -67,6 +70,7 @@ const PantryForm = () => {
   const form = useForm<z.infer<typeof pantryFormSchema>>({
     resolver: zodResolver(pantryFormSchema),
     defaultValues: {
+      userId: "",
       label: "",
       categoryId: "",
       quantityUnit: QuantityUnit.Piece,
@@ -75,7 +79,7 @@ const PantryForm = () => {
   });
 
   const onSubmit: SubmitHandler<Product> = (product) => {
-    addProductMutation(product);
+    addProductMutation({ ...product, userId: user?.id || "" });
   };
 
   return isLoadingCategories ? (

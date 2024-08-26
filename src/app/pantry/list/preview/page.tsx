@@ -10,6 +10,7 @@ import useProductController from "@/lib/hooks/useProductController";
 
 export interface AiProduct {
   id?: string;
+  userId: string;
   label: string;
   category: string;
   quantity: number;

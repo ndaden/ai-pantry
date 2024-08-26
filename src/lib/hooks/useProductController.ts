@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { AiProduct } from "@/app/pantry/list/preview/page";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const useProductController = ({
   refreshProductList,
@@ -12,6 +13,7 @@ const useProductController = ({
 }) => {
   const { toast } = useToast();
   const route = useRouter();
+  const { user } = useKindeBrowserClient();
 
   const addProduct = async (product: Product | Product[]) => {
     try {
@@ -26,8 +28,14 @@ const useProductController = ({
   };
 
   const addAiProduct = async (product: AiProduct[]) => {
+    const productsToAdd = product.map((p) => ({
+      ...p,
+      userId: user?.id || "",
+    }));
     try {
-      const { data, error } = await client.api.product["ai-add"].post(product);
+      const { data, error } = await client.api.product["ai-add"].post(
+        productsToAdd
+      );
       if (error) {
         throw error;
       }

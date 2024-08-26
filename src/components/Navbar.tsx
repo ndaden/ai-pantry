@@ -10,7 +10,6 @@ const Navbar = async () => {
   const user = await getUser();
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
 
-  console.log("user =", user);
   const isTest = false;
 
   return (

@@ -3,10 +3,13 @@ import Product from "./product";
 import { ProductView } from "@/lib/types/ProductView";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { getAuthHeaders } from "@/lib/utils";
+import { cookies } from "next/headers";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
     fetch: { cache: "no-store", credentials: "include" },
+    headers: getAuthHeaders(cookies()),
   });
 
   const refreshProductList = async () => {

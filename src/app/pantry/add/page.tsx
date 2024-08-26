@@ -24,10 +24,10 @@ import {
 } from "lucide-react";
 import { QuantityUnit } from "@/lib/types/QuantityUnit";
 import { Product } from "@/lib/types/Product";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { QUANTITIES, UNITS } from "./constants";
 import useProductController from "@/lib/hooks/useProductController";
-import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const pantryFormSchema = z.object({
   userId: z.string(),
@@ -57,7 +57,7 @@ const CATEGORY_ICON = [
 ] as const;
 
 const PantryForm = () => {
-  const { user } = useKindeAuth();
+  const { user } = useKindeBrowserClient();
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {

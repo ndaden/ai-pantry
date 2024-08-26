@@ -7,8 +7,6 @@ import Image from "next/image";
 export const client = treaty<App>("localhost:3000");
 
 const Page = async () => {
-  const { data } = await client.api.index.get();
-
   return (
     <div className="bg-slate-50">
       <section>

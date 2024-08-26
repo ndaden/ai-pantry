@@ -3,8 +3,7 @@ import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { PrismaClient } from "@prisma/client";
-import Elysia, { t } from "elysia";
-import { withAuth } from "@kinde-oss/kinde-auth-nextjs/middleware";
+import Elysia from "elysia";
 
 type App = Elysia<
   "",
@@ -21,36 +20,26 @@ export const pantryModule = (app: App) =>
   app
     .group("/product", (app) =>
       app
-        .get(
-          "/list",
-          async ({ db, cookie, headers, request }) => {
-            console.log("cookie:", cookie, request);
-            const { getUser } = getKindeServerSession();
+        .get("/list", async ({ db }) => {
+          const { getUser } = getKindeServerSession();
+          const user = await getUser();
 
-            const user = await getUser();
-
-            console.log(request);
-
-            return db.product.findMany({
-              select: {
-                id: true,
-                label: true,
-                quantity: true,
-                quantityUnit: true,
-                categoryId: true,
-                category: { select: { label: true } },
+          return db.product.findMany({
+            select: {
+              id: true,
+              label: true,
+              quantity: true,
+              quantityUnit: true,
+              categoryId: true,
+              category: { select: { label: true } },
+            },
+            where: {
+              userId: {
+                equals: user?.id,
               },
-              where: {
-                userId: {
-                  equals: user?.id,
-                },
-              },
-            });
-          },
-          {
-            beforeHandle: withAuth,
-          }
-        )
+            },
+          });
+        })
         .post("/add", async ({ body, db }) => {
           if (Array.isArray(body)) {
             return db.product.createMany({ data: body as Product[] });
@@ -72,6 +61,7 @@ export const pantryModule = (app: App) =>
               });
 
               return {
+                userId: product.userId,
                 categoryId: category?.id,
                 label: product.label,
                 quantity: product.quantity,

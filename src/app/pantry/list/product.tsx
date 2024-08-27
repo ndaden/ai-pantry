@@ -1,6 +1,6 @@
 "use client";
 
-import { client } from "@/app/page";
+import { client } from "@/app/api/[[...route]]/client";
 import Dialog from "@/components/Dialog";
 import { Button } from "@/components/ui/button";
 import {

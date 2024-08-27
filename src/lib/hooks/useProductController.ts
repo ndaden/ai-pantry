@@ -1,10 +1,10 @@
-import { client } from "@/app/page";
 import { Product } from "../types/Product";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { AiProduct } from "@/app/pantry/list/preview/page";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { client } from "@/app/api/[[...route]]/client";
 
 const useProductController = ({
   refreshProductList,

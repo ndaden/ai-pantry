@@ -1,7 +1,8 @@
 "use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { client } from "../page";
+
 import { FormEvent } from "react";
+import { client } from "../api/[[...route]]/client";
 
 type SignUp = {
   name: string;

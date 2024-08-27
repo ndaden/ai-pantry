@@ -39,5 +39,3 @@ export const GET = app.handle;
 export const POST = app.handle;
 export const PUT = app.handle;
 export const DELETE = app.handle;
-
-export const client = treaty<App>("localhost:3000");

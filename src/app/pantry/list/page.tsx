@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/utils";
 import { cookies } from "next/headers";
-import { client } from "@/app/api/[[...route]]/route";
+import { client } from "@/app/api/[[...route]]/client";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({

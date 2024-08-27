@@ -1,10 +1,10 @@
-import { client } from "@/app/page";
 import Product from "./product";
 import { ProductView } from "@/lib/types/ProductView";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { getAuthHeaders } from "@/lib/utils";
 import { cookies } from "next/headers";
+import { client } from "@/app/api/[[...route]]/route";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({

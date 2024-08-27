@@ -3,6 +3,7 @@ import { swagger } from "@elysiajs/swagger";
 import { aiModule } from "./modules/ai";
 import { pantryModule } from "./modules/pantry";
 import { PrismaClient } from "@prisma/client";
+import { treaty } from "@elysiajs/eden";
 
 // create a new Prisma Client instance
 const prisma = new PrismaClient({
@@ -38,3 +39,5 @@ export const GET = app.handle;
 export const POST = app.handle;
 export const PUT = app.handle;
 export const DELETE = app.handle;
+
+export const client = treaty<App>("localhost:3000");

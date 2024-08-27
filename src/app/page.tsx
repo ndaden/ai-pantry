@@ -1,10 +1,6 @@
-import { treaty } from "@elysiajs/eden";
-import { App } from "./api/[[...route]]/route";
 import { Check, Star } from "lucide-react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Image from "next/image";
-
-export const client = treaty<App>("localhost:3000");
 
 const Page = async () => {
   return (

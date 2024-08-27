@@ -30,8 +30,7 @@ const app = new Elysia({ prefix: "/api" })
     }
   )
   .use(pantryModule)
-  .use(aiModule)
-  .listen(3000);
+  .use(aiModule);
 
 export type App = typeof app;
 

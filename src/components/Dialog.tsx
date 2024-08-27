@@ -28,6 +28,7 @@ const Dialog = React.forwardRef(
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+        {/* @ts-ignore */}
         <AlertDialogContent aria-description={message} ref={ref}>
           <AlertDialogHeader>
             <AlertDialogTitle>{message}</AlertDialogTitle>

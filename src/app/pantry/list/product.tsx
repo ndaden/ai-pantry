@@ -36,6 +36,7 @@ const Product = ({
       label: product.label,
       quantity: product.quantity + 1,
       quantityUnit: product.quantityUnit,
+      userId: "",
     });
   };
 
@@ -52,6 +53,7 @@ const Product = ({
         label: product.label,
         quantity: product.quantity - 1,
         quantityUnit: product.quantityUnit,
+        userId: "",
       });
     }
   };

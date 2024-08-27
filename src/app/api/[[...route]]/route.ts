@@ -3,7 +3,6 @@ import { swagger } from "@elysiajs/swagger";
 import { aiModule } from "./modules/ai";
 import { pantryModule } from "./modules/pantry";
 import { PrismaClient } from "@prisma/client";
-import { treaty } from "@elysiajs/eden";
 
 // create a new Prisma Client instance
 const prisma = new PrismaClient({
@@ -31,7 +30,8 @@ const app = new Elysia({ prefix: "/api" })
     }
   )
   .use(pantryModule)
-  .use(aiModule);
+  .use(aiModule)
+  .listen(3000);
 
 export type App = typeof app;
 

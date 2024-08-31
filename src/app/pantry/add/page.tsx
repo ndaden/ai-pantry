@@ -27,7 +27,7 @@ import { Product } from "@/lib/types/Product";
 import { useState } from "react";
 import { QUANTITIES, UNITS } from "./constants";
 import useProductController from "@/lib/hooks/useProductController";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 
 const pantryFormSchema = z.object({
   userId: z.string(),
@@ -57,7 +57,7 @@ const CATEGORY_ICON = [
 ] as const;
 
 const PantryForm = () => {
-  const { getUser } = useKindeBrowserClient();
+  const { getUser } = useKindeAuth();
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {

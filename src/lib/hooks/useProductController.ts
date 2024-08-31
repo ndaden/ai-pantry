@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { AiProduct } from "@/app/pantry/list/preview/page";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-nextjs";
 import { client } from "@/app/api/[[...route]]/client";
 
 const useProductController = ({
@@ -13,7 +13,7 @@ const useProductController = ({
 }) => {
   const { toast } = useToast();
   const route = useRouter();
-  const { getUser } = useKindeBrowserClient();
+  const { getUser } = useKindeAuth();
 
   const addProduct = async (product: Product) => {
     try {

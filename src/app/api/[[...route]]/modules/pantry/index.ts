@@ -41,12 +41,25 @@ export const pantryModule = (app: App) =>
           });
         })
         .post(
+          "/batch-add",
+          async ({ body, db }) => {
+            return db.product.createMany({ data: body as Product[] });
+          },
+          {
+            body: t.Array(
+              t.Object({
+                userId: t.String(),
+                categoryId: t.String(),
+                label: t.String(),
+                quantity: t.Number(),
+                quantityUnit: t.String(),
+              })
+            ),
+          }
+        )
+        .post(
           "/add",
           async ({ body, db }) => {
-            if (Array.isArray(body)) {
-              return db.product.createMany({ data: body as Product[] });
-            }
-
             return db.product.create({
               data: body as Product,
             });

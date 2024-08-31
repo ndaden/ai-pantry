@@ -13,9 +13,9 @@ const useProductController = ({
 }) => {
   const { toast } = useToast();
   const route = useRouter();
-  const { user } = useKindeBrowserClient();
+  const { getUser } = useKindeBrowserClient();
 
-  const addProduct = async (product: Product | Product[]) => {
+  const addProduct = async (product: Product) => {
     try {
       const { data, error } = await client.api.product.add.post(product);
       if (error) {
@@ -28,6 +28,7 @@ const useProductController = ({
   };
 
   const addAiProduct = async (product: AiProduct[]) => {
+    const user = getUser();
     const productsToAdd = product.map((p) => ({
       ...p,
       userId: user?.id || "",

@@ -5,7 +5,6 @@ import ReactQueryProvider from "../lib/ReactQueryProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
-import { KindeProvider } from "@kinde-oss/kinde-auth-nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 

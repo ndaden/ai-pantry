@@ -8,14 +8,14 @@ import { client } from "@/app/api/[[...route]]/client";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
-    fetch: { cache: "no-store", credentials: "include" },
+    fetch: { credentials: "include" },
     headers: getAuthHeaders(cookies()),
   });
 
   const refreshProductList = async () => {
     "use server";
 
-    revalidatePath("/pantry/list", "layout");
+    // revalidatePath("/pantry/list");
   };
 
   return data && data.length > 0 ? (

@@ -84,7 +84,7 @@ export const pantryModule = (app: App) =>
     )
     .group("/category", (app) =>
       app
-        .get("/list", ({ db }) => {
+        .get("/list", async ({ db }) => {
           return db.category.findMany();
         })
         .get("/find/:categoryName", ({ db, params }) => {

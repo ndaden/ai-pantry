@@ -3,7 +3,7 @@ import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { PrismaClient } from "@prisma/client";
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 
 type App = Elysia<
   "",
@@ -101,11 +101,19 @@ export const pantryModule = (app: App) =>
             },
           });
         })
-        .post("/add", async ({ body, db }) => {
-          return db.category.create({
-            data: body as Category,
-          });
-        })
+        .post(
+          "/add",
+          async ({ body, db }) => {
+            return db.category.create({
+              data: body as Category,
+            });
+          },
+          {
+            body: t.Object({
+              label: t.String(),
+            }),
+          }
+        )
         .put("/:id", ({ db, body, params }) => {
           return db.category.update({
             where: { id: params.id },

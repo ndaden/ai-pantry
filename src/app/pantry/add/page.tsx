@@ -57,7 +57,7 @@ const CATEGORY_ICON = [
 ] as const;
 
 const PantryForm = () => {
-  const { user } = useKindeBrowserClient();
+  const { getUser } = useKindeBrowserClient();
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {
@@ -79,6 +79,8 @@ const PantryForm = () => {
   });
 
   const onSubmit: SubmitHandler<Product> = (product) => {
+    const user = getUser();
+    console.log(user);
     addProductMutation({ ...product, userId: user?.id || "" });
   };
 

@@ -72,22 +72,29 @@ export const pantryModule = (app: App) =>
 
           return db.product.createMany({ data: productsToCreate });
         })
-        .put("/:id", ({ db, body, params }) => {
+        .put("/:id", async ({ db, body, params }) => {
           return db.product.update({
             where: { id: params.id },
             data: body as Product,
           });
         })
-        .delete("/:id", ({ db, params }) => {
+        .delete("/:id", async ({ db, params }) => {
           return db.product.delete({ where: { id: params.id } });
         })
     )
     .group("/category", (app) =>
       app
         .get("/list", async ({ db }) => {
-          return db.category.findMany();
+          return db.category.findMany({
+            select: {
+              label: true,
+              id: true,
+              createdAt: false,
+              updatedAt: false,
+            },
+          });
         })
-        .get("/find/:categoryName", ({ db, params }) => {
+        .get("/find/:categoryName", async ({ db, params }) => {
           return db.category.findFirst({
             where: {
               label: { equals: params.categoryName },
@@ -107,13 +114,13 @@ export const pantryModule = (app: App) =>
             }),
           }
         )
-        .put("/:id", ({ db, body, params }) => {
+        .put("/:id", async ({ db, body, params }) => {
           return db.category.update({
             where: { id: params.id },
             data: body as Category,
           });
         })
-        .delete("/:id", ({ db, params }) => {
+        .delete("/:id", async ({ db, params }) => {
           return db.category.delete({ where: { id: params.id } });
         })
     );

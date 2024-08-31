@@ -85,14 +85,7 @@ export const pantryModule = (app: App) =>
     .group("/category", (app) =>
       app
         .get("/list", ({ db }) => {
-          return db.category.findMany({
-            select: {
-              id: true,
-              label: true,
-              createdAt: false,
-              updatedAt: false,
-            },
-          });
+          return db.category.findMany();
         })
         .get("/find/:categoryName", ({ db, params }) => {
           return db.category.findFirst({

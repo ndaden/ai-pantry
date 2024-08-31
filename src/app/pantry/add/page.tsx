@@ -57,7 +57,7 @@ const CATEGORY_ICON = [
 ] as const;
 
 const PantryForm = () => {
-  const { getUser } = useKindeAuth();
+  const { getUser, isLoading } = useKindeAuth();
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {
@@ -86,7 +86,7 @@ const PantryForm = () => {
 
   return (
     <KindeProvider>
-      {isLoadingCategories ? (
+      {isLoadingCategories || isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <Loader2 className="animate-spin h-6 w-6 text-zinc-500 mb-2" />
         </div>

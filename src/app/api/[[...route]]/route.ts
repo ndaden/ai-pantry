@@ -14,7 +14,17 @@ const prisma = new PrismaClient({
 // create a new Elysia instance and pass DB as context
 const app = new Elysia({ prefix: "/api" })
   .decorate("db", prisma)
-  .use(cors({ origin: ["https://aipantry.dnabil.ovh/"] }))
+  .onAfterHandle(({ request, set }) => {
+    // Only process CORS requests
+    if (request.method !== "OPTIONS") return;
+
+    const allowHeader = set.headers["Access-Control-Allow-Headers"];
+    if (allowHeader === "*") {
+      set.headers["Access-Control-Allow-Headers"] =
+        request.headers.get("Access-Control-Request-Headers") ?? "";
+    }
+  })
+  .use(cors())
   .use(swagger({ provider: "swagger-ui" }))
   .use(pantryModule)
   .use(aiModule);

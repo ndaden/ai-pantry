@@ -2,20 +2,20 @@ import Product from "./product";
 import { ProductView } from "@/lib/types/ProductView";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { client } from "@/app/api/[[...route]]/client";
 import { getAuthHeaders } from "@/lib/utils";
 import { cookies } from "next/headers";
-import { client } from "@/app/api/[[...route]]/client";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
-    fetch: { credentials: "include" },
+    fetch: { cache: "no-cache", credentials: "same-origin" },
     headers: getAuthHeaders(cookies()),
   });
 
   const refreshProductList = async () => {
     "use server";
 
-    // revalidatePath("/pantry/list");
+    revalidatePath("/pantry/list");
   };
 
   return data && data.length > 0 ? (

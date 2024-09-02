@@ -24,6 +24,10 @@ export const pantryModule = (app: App) =>
           const { getUser } = getKindeServerSession();
           const user = await getUser();
 
+          if (!user) {
+            return [];
+          }
+
           return db.product.findMany({
             select: {
               id: true,
@@ -110,6 +114,12 @@ export const pantryModule = (app: App) =>
     .group("/category", (app) =>
       app
         .get("/list", async ({ db }) => {
+          const { getUser } = getKindeServerSession();
+          const user = await getUser();
+
+          if (!user) {
+            return [];
+          }
           return db.category.findMany({
             select: {
               label: true,

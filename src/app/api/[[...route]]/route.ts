@@ -1,10 +1,9 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { aiModule } from "./modules/ai";
 import { pantryModule } from "./modules/pantry";
 import { PrismaClient } from "@prisma/client";
-import { handleAuth } from "@kinde-oss/kinde-auth-nextjs/server";
 
 // create a new Prisma Client instance
 const prisma = new PrismaClient({

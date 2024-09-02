@@ -14,7 +14,7 @@ const prisma = new PrismaClient({
 // create a new Elysia instance and pass DB as context
 const app = new Elysia({ prefix: "/api" })
   .decorate("db", prisma)
-  .use(cors())
+  .use(cors({ origin: ["https://aipantry.dnabil.ovh/"] }))
   .use(swagger({ provider: "swagger-ui" }))
   .use(pantryModule)
   .use(aiModule);

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.0.2",
+    "@elysiajs/cors": "^1.1.0",
     "@elysiajs/eden": "^1.0.14",
     "@google/generative-ai": "^0.13.0",
     "@headlessui/react": "^2.1.2",

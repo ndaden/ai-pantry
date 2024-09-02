@@ -1,8 +1,10 @@
 import { Elysia, t } from "elysia";
 import { swagger } from "@elysiajs/swagger";
+import { cors } from "@elysiajs/cors";
 import { aiModule } from "./modules/ai";
 import { pantryModule } from "./modules/pantry";
 import { PrismaClient } from "@prisma/client";
+import { handleAuth } from "@kinde-oss/kinde-auth-nextjs/server";
 
 // create a new Prisma Client instance
 const prisma = new PrismaClient({
@@ -12,23 +14,8 @@ const prisma = new PrismaClient({
 // create a new Elysia instance and pass DB as context
 const app = new Elysia({ prefix: "/api" })
   .decorate("db", prisma)
+  .use(cors())
   .use(swagger({ provider: "swagger-ui" }))
-  .get("/", ({ db }) => {
-    db.product.findMany();
-    return "Hello from Elysia";
-  })
-  .post(
-    "/sign",
-    ({ body }) => {
-      return body;
-    },
-    {
-      body: t.Object({
-        name: t.String(),
-        password: t.String(),
-      }),
-    }
-  )
   .use(pantryModule)
   .use(aiModule);
 

@@ -28,7 +28,11 @@ const Navbar = async () => {
             {user || isTest ? (
               <>
                 <DropdownNavbar />
-                <LogoutLink>Logout</LogoutLink>
+                <LogoutLink
+                  className={buttonVariants({ size: "sm", variant: "ghost" })}
+                >
+                  Logout
+                </LogoutLink>
                 {isAdmin ? (
                   <Link
                     href={"/admin/dashboard"}
@@ -47,7 +51,11 @@ const Navbar = async () => {
                 >
                   Sign up
                 </Link>
-                <LoginLink>Login</LoginLink>
+                <LoginLink
+                  className={buttonVariants({ size: "sm", variant: "ghost" })}
+                >
+                  Login
+                </LoginLink>
 
                 <div className="h-8 w-px bg-zinc-200 hidden sm:block" />
                 <Link

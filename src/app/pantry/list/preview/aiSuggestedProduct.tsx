@@ -14,8 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon } from "lucide-react";
-import { AiProduct } from "./page";
+import { ChevronDownIcon, SparklesIcon } from "lucide-react";
+import { AiProduct } from "./AddAiProducts";
 
 const AiSuggestedProduct = ({
   product,
@@ -33,9 +33,10 @@ const AiSuggestedProduct = ({
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
           <CardTitle>
+            <SparklesIcon className="h-4 w-4 inline mr-3 text-zinc-400" />{" "}
             {product.label} - {product.category}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="ml-8 mt-3">
             {product.quantity} {product.quantityUnit}
           </CardDescription>
         </div>

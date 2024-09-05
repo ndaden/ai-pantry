@@ -8,4 +8,5 @@ export interface ProductView {
   category: CategoryView;
   quantityUnit: QuantityUnit;
   quantity: number;
+  userId: string;
 }

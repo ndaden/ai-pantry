@@ -1,4 +1,4 @@
-import { AiProduct } from "@/app/pantry/list/preview/page";
+import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
 import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";

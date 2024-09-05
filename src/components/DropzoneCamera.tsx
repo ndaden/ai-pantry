@@ -6,10 +6,10 @@ import Dropzone, { FileRejection } from "react-dropzone";
 import { Progress } from "./ui/progress";
 import { useToast } from "./ui/use-toast";
 import useUploadFile from "@/lib/hooks/useUploadFile";
-import { AiProduct } from "@/app/pantry/list/preview/page";
 import { SESSION_STORAGE_AI_DATA_KEY } from "@/app/appConstants";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
+import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
 
 const DropzoneCamera = () => {
   const { toast } = useToast();

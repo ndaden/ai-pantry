@@ -3,13 +3,13 @@ import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import Dropzone, { FileRejection } from "react-dropzone";
 import { Progress } from "./ui/progress";
 import { SESSION_STORAGE_AI_DATA_KEY } from "@/app/appConstants";
-import { AiProduct } from "@/app/pantry/list/preview/page";
 import useUploadFile from "@/lib/hooks/useUploadFile";
 import { useState, useTransition } from "react";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
+import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
 
 const DropzoneGallery = () => {
   const { toast } = useToast();

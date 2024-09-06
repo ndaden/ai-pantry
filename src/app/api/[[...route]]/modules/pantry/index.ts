@@ -107,13 +107,15 @@ export const pantryModule = (app: App) =>
             return db.product.createMany({ data: productsToCreate });
           },
           {
-            body: t.Object({
-              userId: t.String(),
-              categoryId: t.String(),
-              label: t.String(),
-              quantity: t.Number(),
-              quantityUnit: t.String(),
-            }),
+            body: t.Array(
+              t.Object({
+                userId: t.String(),
+                categoryId: t.String(),
+                label: t.String(),
+                quantity: t.Number(),
+                quantityUnit: t.String(),
+              })
+            ),
           }
         )
         .put("/:id", async ({ db, body, params }) => {

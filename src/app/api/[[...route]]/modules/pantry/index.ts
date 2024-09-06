@@ -78,32 +78,44 @@ export const pantryModule = (app: App) =>
             }),
           }
         )
-        .post("/ai-add", async ({ body, db }) => {
-          console.log(body as unknown as AiProduct);
-          if (!body) {
-            return [];
+        .post(
+          "/ai-add",
+          async ({ body, db }) => {
+            console.log(body as unknown as AiProduct);
+            if (!body) {
+              return [];
+            }
+
+            const productsToCreate: Product[] = await Promise.all(
+              (body as unknown as AiProduct[]).map(async (product) => {
+                const category = await db.category.findFirst({
+                  where: {
+                    label: { equals: product.category },
+                  },
+                });
+
+                return {
+                  userId: product.userId,
+                  categoryId: category?.id,
+                  label: product.label,
+                  quantity: product.quantity,
+                  quantityUnit: product.quantityUnit,
+                } as Product;
+              })
+            );
+
+            return db.product.createMany({ data: productsToCreate });
+          },
+          {
+            body: t.Object({
+              userId: t.String(),
+              categoryId: t.String(),
+              label: t.String(),
+              quantity: t.Number(),
+              quantityUnit: t.String(),
+            }),
           }
-
-          const productsToCreate: Product[] = await Promise.all(
-            (body as unknown as AiProduct[]).map(async (product) => {
-              const category = await db.category.findFirst({
-                where: {
-                  label: { equals: product.category },
-                },
-              });
-
-              return {
-                userId: product.userId,
-                categoryId: category?.id,
-                label: product.label,
-                quantity: product.quantity,
-                quantityUnit: product.quantityUnit,
-              } as Product;
-            })
-          );
-
-          return db.product.createMany({ data: productsToCreate });
-        })
+        )
         .put("/:id", async ({ db, body, params }) => {
           return db.product.update({
             where: { id: params.id },

@@ -79,6 +79,7 @@ export const pantryModule = (app: App) =>
           }
         )
         .post("/ai-add", async ({ body, db }) => {
+          console.log(body);
           if (!body) {
             return [];
           }

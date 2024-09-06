@@ -110,7 +110,7 @@ export const pantryModule = (app: App) =>
             body: t.Array(
               t.Object({
                 userId: t.String(),
-                categoryId: t.String(),
+                category: t.String(),
                 label: t.String(),
                 quantity: t.Number(),
                 quantityUnit: t.String(),

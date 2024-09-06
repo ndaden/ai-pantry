@@ -81,8 +81,8 @@ export const pantryModule = (app: App) =>
         .post("/ai-add", async ({ body, db }) => {
           const products: AiProduct[] = body as unknown as AiProduct[];
 
-          console.log("body =", body);
-          console.log("products =", products);
+          /* console.log("body =", body);
+          console.log("products =", products); */
 
           const productsToCreate: Product[] = await Promise.all(
             products.map(async (product) => {

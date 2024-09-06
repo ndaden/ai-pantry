@@ -81,13 +81,12 @@ export const pantryModule = (app: App) =>
         .post(
           "/ai-add",
           async ({ body, db }) => {
-            console.log(body as unknown as AiProduct);
             if (!body) {
               return [];
             }
 
             const productsToCreate: Product[] = await Promise.all(
-              (body as unknown as AiProduct[]).map(async (product) => {
+              body.map(async (product) => {
                 const category = await db.category.findFirst({
                   where: {
                     label: { equals: product.category },

@@ -127,7 +127,7 @@ export const pantryModule = (app: App) =>
           },
           {
             body: t.Object({
-              userId: t.String(),
+              userId: t.Optional(t.String()),
               categoryId: t.String(),
               label: t.String(),
               quantity: t.Number(),

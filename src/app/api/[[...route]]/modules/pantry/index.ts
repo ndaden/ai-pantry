@@ -117,12 +117,24 @@ export const pantryModule = (app: App) =>
             ),
           }
         )
-        .put("/:id", async ({ db, body, params }) => {
-          return db.product.update({
-            where: { id: params.id },
-            data: body as Product,
-          });
-        })
+        .put(
+          "/:id",
+          async ({ db, body, params }) => {
+            return db.product.update({
+              where: { id: params.id },
+              data: body as Product,
+            });
+          },
+          {
+            body: t.Object({
+              userId: t.String(),
+              categoryId: t.String(),
+              label: t.String(),
+              quantity: t.Number(),
+              quantityUnit: t.String(),
+            }),
+          }
+        )
         .delete("/:id", async ({ db, params }) => {
           return db.product.delete({ where: { id: params.id } });
         })

@@ -2,6 +2,7 @@ import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
 import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { PrismaClient } from "@prisma/client";
 import Elysia, { t } from "elysia";
 
@@ -11,7 +12,7 @@ type App = Elysia<
   {
     decorator: { db: PrismaClient };
     store: {};
-    derive: {};
+    derive: { user: KindeUser | null };
     resolve: {};
   }
 >;
@@ -20,12 +21,10 @@ export const pantryModule = (app: App) =>
   app
     .group("/product", (app) =>
       app
-        .get("/list", async ({ db }) => {
-          const { getUser } = getKindeServerSession();
-          const user = await getUser();
-
+        .get("/list", async ({ db, user, error }) => {
+          console.log(user);
           if (!user) {
-            return [];
+            return error(401, "Unauthorized");
           }
 
           return db.product.findMany({
@@ -46,7 +45,11 @@ export const pantryModule = (app: App) =>
         })
         .post(
           "/batch-add",
-          async ({ body, db }) => {
+          async ({ body, db, user, error }) => {
+            if (!user) {
+              return error(401, "Unauthorized");
+            }
+
             return db.product.createMany({ data: body as Product[] });
           },
           {
@@ -63,7 +66,11 @@ export const pantryModule = (app: App) =>
         )
         .post(
           "/add",
-          async ({ body, db }) => {
+          async ({ body, db, user, error }) => {
+            if (!user) {
+              return error(401, "Unauthorized");
+            }
+
             return db.product.create({
               data: body as Product,
             });
@@ -80,7 +87,11 @@ export const pantryModule = (app: App) =>
         )
         .post(
           "/ai-add",
-          async ({ body, db }) => {
+          async ({ body, db, user, error }) => {
+            if (!user) {
+              return error(401, "Unauthorized");
+            }
+
             if (!body) {
               return [];
             }
@@ -119,7 +130,11 @@ export const pantryModule = (app: App) =>
         )
         .put(
           "/:id",
-          async ({ db, body, params }) => {
+          async ({ db, body, params, user, error }) => {
+            if (!user) {
+              return error(401, "Unauthorized");
+            }
+
             return db.product.update({
               where: { id: params.id },
               data: body as Product,
@@ -135,19 +150,21 @@ export const pantryModule = (app: App) =>
             }),
           }
         )
-        .delete("/:id", async ({ db, params }) => {
+        .delete("/:id", async ({ db, params, user, error }) => {
+          if (!user) {
+            return error(401, "Unauthorized");
+          }
+
           return db.product.delete({ where: { id: params.id } });
         })
     )
     .group("/category", (app) =>
       app
-        .get("/list", async ({ db }) => {
-          const { getUser } = getKindeServerSession();
-          const user = await getUser();
-
+        .get("/list", async ({ db, user, error }) => {
           if (!user) {
-            return [];
+            return error(401, "Unauthorized");
           }
+
           return db.category.findMany({
             select: {
               label: true,
@@ -157,7 +174,11 @@ export const pantryModule = (app: App) =>
             },
           });
         })
-        .get("/find/:categoryName", async ({ db, params }) => {
+        .get("/find/:categoryName", async ({ db, params, user, error }) => {
+          if (!user) {
+            return error(401, "Unauthorized");
+          }
+
           return db.category.findFirst({
             where: {
               label: { equals: params.categoryName },
@@ -166,7 +187,11 @@ export const pantryModule = (app: App) =>
         })
         .post(
           "/add",
-          async ({ body, db }) => {
+          async ({ body, db, user, error }) => {
+            if (!user) {
+              return error(401, "Unauthorized");
+            }
+
             return db.category.create({
               data: body as Category,
             });
@@ -177,13 +202,21 @@ export const pantryModule = (app: App) =>
             }),
           }
         )
-        .put("/:id", async ({ db, body, params }) => {
+        .put("/:id", async ({ db, body, params, user, error }) => {
+          if (!user) {
+            return error(401, "Unauthorized");
+          }
+
           return db.category.update({
             where: { id: params.id },
             data: body as Category,
           });
         })
-        .delete("/:id", async ({ db, params }) => {
+        .delete("/:id", async ({ db, params, user, error }) => {
+          if (!user) {
+            return error(401, "Unauthorized");
+          }
+
           return db.category.delete({ where: { id: params.id } });
         })
     );

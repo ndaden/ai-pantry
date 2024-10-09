@@ -8,7 +8,7 @@ import EmptyProductList from "@/components/EmptyProductList";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
-    fetch: { cache: "no-cache", credentials: "same-origin" },
+    fetch: { cache: "no-store", credentials: "same-origin" },
     headers: getAuthHeaders(cookies()),
   });
 

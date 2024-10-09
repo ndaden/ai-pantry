@@ -237,7 +237,11 @@ const AddProduct = ({ user }: { user: KindeUser | null | undefined }) => {
         </div>
 
         <Button type="submit" className="sm:w-fit w-full" size={"lg"}>
-          Ajouter
+          {isPendingAddProduct ? (
+            <Loader2 className="animate-spin h-6 w-6 " />
+          ) : (
+            "Ajouter"
+          )}
         </Button>
       </form>
     </Form>

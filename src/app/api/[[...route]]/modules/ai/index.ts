@@ -1,5 +1,18 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
+import { PrismaClient } from "@prisma/client";
 import Elysia, { t } from "elysia";
+
+type App = Elysia<
+  "",
+  false,
+  {
+    decorator: { db: PrismaClient };
+    store: {};
+    derive: { user: KindeUser | null };
+    resolve: {};
+  }
+>;
 
 const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genAi.getGenerativeModel({
@@ -8,10 +21,14 @@ const model = genAi.getGenerativeModel({
   systemInstruction: process.env.GEMINI_SYSTEM_INSTRUCTION,
 });
 
-export const aiModule = (app: Elysia) =>
+export const aiModule = (app: App) =>
   app.post(
     "/image",
-    async ({ body, set }) => {
+    async ({ body, set, user, error }) => {
+      if (!user) {
+        return error(401, "Unauthorized");
+      }
+
       if (!body.image) {
         set.status = 400;
         return { success: false, message: "Please upload an image" };

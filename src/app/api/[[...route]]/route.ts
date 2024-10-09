@@ -4,6 +4,7 @@ import { cors } from "@elysiajs/cors";
 import { aiModule } from "./modules/ai";
 import { pantryModule } from "./modules/pantry";
 import { PrismaClient } from "@prisma/client";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 // create a new Prisma Client instance
 const prisma = new PrismaClient({
@@ -25,6 +26,12 @@ const app = new Elysia({ prefix: "/api" })
   })
   .use(cors())
   .use(swagger({ provider: "swagger-ui" }))
+  .derive(async ({}) => {
+    const { getUser } = getKindeServerSession();
+    const user = await getUser();
+
+    return { user };
+  })
   .use(pantryModule)
   .use(aiModule);
 

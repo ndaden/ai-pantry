@@ -28,6 +28,7 @@ import { useState } from "react";
 import { QUANTITIES, UNITS } from "./constants";
 import useProductController from "@/lib/hooks/useProductController";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
+import LoadingAddProduct from "./loading";
 
 const pantryFormSchema = z.object({
   userId: z.string(),
@@ -82,9 +83,7 @@ const AddProduct = ({ user }: { user: KindeUser | null | undefined }) => {
   };
 
   return isLoadingCategories ? (
-    <div className="flex-1 flex flex-col items-center justify-center">
-      <Loader2 className="animate-spin h-6 w-6 text-zinc-500 mb-2" />
-    </div>
+    <LoadingAddProduct />
   ) : (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

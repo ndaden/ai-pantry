@@ -15,9 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
 import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
 
 const Product = ({
   product,
@@ -26,6 +28,7 @@ const Product = ({
   product: ProductView;
   refreshProductList: () => Promise<void>;
 }) => {
+  const [isPendingDeleteProduct, setIsPendingDeleteProduct] = useState(false);
   const { updateProductMutation, isPendingUpdateProduct } =
     useProductController({ refreshProductList });
 
@@ -40,9 +43,11 @@ const Product = ({
     });
   };
 
-  const deleteProductHandler = (id: string) => {
-    client.api.product({ id }).delete();
-    refreshProductList();
+  const deleteProductHandler = async (id: string) => {
+    setIsPendingDeleteProduct(true);
+    await client.api.product({ id }).delete();
+    await refreshProductList();
+    setIsPendingDeleteProduct(false);
   };
 
   const subtractQuantityHandler = (product: ProductView) => {
@@ -57,7 +62,11 @@ const Product = ({
       });
     }
   };
-  return (
+  return isPendingDeleteProduct || isPendingUpdateProduct ? (
+    <div className="mx-1 my-3">
+      <Skeleton className="h-10 w-[100%]"></Skeleton>
+    </div>
+  ) : (
     <Card key={product.id} className="relative my-1 p-0 bg-green-100/50">
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>

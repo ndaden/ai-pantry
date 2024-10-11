@@ -1,8 +1,10 @@
 "use client";
 import {
   LegacyRef,
+  MouseEvent,
   MouseEventHandler,
   ReactNode,
+  TouchEventHandler,
   useEffect,
   useRef,
   useState,
@@ -34,7 +36,9 @@ const SwipeableCard = ({
     setWidthRoot(width ?? 0);
   }, []);
 
-  const onMouseDownHandler: MouseEventHandler<HTMLDivElement> = (e) => {
+  const onMouseDownHandler: MouseEventHandler<HTMLDivElement> = (
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ) => {
     setStartX(e.clientX);
   };
 
@@ -60,6 +64,34 @@ const SwipeableCard = ({
       setTranslateX(limitedTranslateX);
     }
   };
+
+  const onTouchStartHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const onTouchEndHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+    if (translateX >= 25 && onSwipeRight) {
+      onSwipeRight();
+    }
+    if (translateX <= -25 && onSwipeLeft) {
+      onSwipeLeft();
+    }
+    setStartX(null);
+    setTranslateX(0);
+  };
+
+  const onTouchMoveHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+    if (startX) {
+      const currentX = e.touches[0].clientX;
+      const deltaX = currentX - startX;
+      const deltaXPercent = Math.ceil((deltaX / widthRoot) * 100);
+
+      setTranslateX(deltaXPercent);
+      const limitedTranslateX = Math.min(Math.max(deltaXPercent, -25), 25);
+      setTranslateX(limitedTranslateX);
+    }
+  };
+
   return (
     <div className="relative">
       <Card
@@ -69,6 +101,9 @@ const SwipeableCard = ({
           transform: `translateX(${translateX}%)`,
           transition: "0.2s ease",
         }}
+        onTouchStart={onTouchStartHandler}
+        onTouchEnd={onTouchEndHandler}
+        onTouchMove={onTouchMoveHandler}
         onMouseDown={onMouseDownHandler}
         onMouseUp={onMouseUpHandler}
         onMouseMove={onMouseMoveHandler}

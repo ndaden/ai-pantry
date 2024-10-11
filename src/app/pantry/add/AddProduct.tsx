@@ -113,29 +113,32 @@ const AddProduct = ({ user }: { user: KindeUser<any> | null | undefined }) => {
             <RadioGroup {...field}>
               <FormLabel className="">Catégorie</FormLabel>
               <Field className="flex flex-wrap justify-center gap-3 mt-5">
-                {(categories?.data || []).map((categorie) => {
-                  return (
-                    <Radio
-                      key={categorie.id}
-                      value={categorie.id}
-                      className={({ checked, hover }) =>
-                        cn(
-                          "flex items-center transition relative p-3 w-fit shadow-xl rounded-2xl border border-zinc-400",
-                          { "border-black": hover },
-                          { "bg-green-600 text-white border-0": checked }
-                        )
-                      }
-                    >
-                      <span className="mr-2">
-                        {
-                          CATEGORY_ICON.find((c) => c.name === categorie.label)
-                            ?.icon
+                {(categories?.data || []).map(
+                  (categorie: { id: string; label: string }) => {
+                    return (
+                      <Radio
+                        key={categorie.id}
+                        value={categorie.id}
+                        className={({ checked, hover }) =>
+                          cn(
+                            "flex items-center transition relative p-3 w-fit shadow-xl rounded-2xl border border-zinc-400",
+                            { "border-black": hover },
+                            { "bg-green-600 text-white border-0": checked }
+                          )
                         }
-                      </span>
-                      <span className="text-sm">{categorie.label}</span>
-                    </Radio>
-                  );
-                })}
+                      >
+                        <span className="mr-2">
+                          {
+                            CATEGORY_ICON.find(
+                              (c) => c.name === categorie.label
+                            )?.icon
+                          }
+                        </span>
+                        <span className="text-sm">{categorie.label}</span>
+                      </Radio>
+                    );
+                  }
+                )}
               </Field>
             </RadioGroup>
           )}

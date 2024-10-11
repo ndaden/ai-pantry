@@ -67,7 +67,11 @@ const useProductController = ({
           title: "Votre produit a été ajouté.",
           variant: "default",
         });
-        route.push("/pantry/list");
+
+        route.refresh();
+        setTimeout(() => {
+          route.push("/pantry/list");
+        }, 500);
       },
     });
 
@@ -82,7 +86,6 @@ const useProductController = ({
         title: "Vos produits ont été ajoutés avec succés.",
         variant: "default",
       });
-      route.push("/pantry/list");
     },
   });
 

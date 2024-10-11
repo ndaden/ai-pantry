@@ -2,6 +2,7 @@
 
 import { client } from "@/app/api/[[...route]]/client";
 import Dialog from "@/components/Dialog";
+import SwipeableCard from "@/components/SwipeableCard";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,10 +16,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
-import { ChevronDownIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, CrossIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 
 const Product = ({
@@ -62,15 +64,65 @@ const Product = ({
       });
     }
   };
+
+  const [editLabel, setEditLabel] = useState<boolean>(false);
+  const [newProductLabel, setNewProductLabel] = useState<string>("");
+
+  const saveNewProductLabelHandler = (product: ProductView) => {
+    updateProductMutation({
+      id: product.id,
+      categoryId: product.categoryId,
+      label: newProductLabel,
+      quantity: product.quantity,
+      quantityUnit: product.quantityUnit,
+      userId: product.userId,
+    });
+    setEditLabel(false);
+  };
+
   return isPendingDeleteProduct || isPendingUpdateProduct ? (
     <div className="mx-1 my-3">
       <Skeleton className="h-10 w-[100%]"></Skeleton>
     </div>
   ) : (
-    <Card key={product.id} className="relative my-1 p-0 bg-green-100/50">
+    <SwipeableCard key={product.id} className="relative my-1 p-0 bg-green-100">
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
-          <CardTitle>{product.label}</CardTitle>
+          <CardTitle>
+            {editLabel ? (
+              <div className="flex space-x-0">
+                <Input
+                  defaultValue={product.label}
+                  onChange={(e) => setNewProductLabel(e.target.value)}
+                />
+                <Button
+                  disabled={!newProductLabel}
+                  size={"sm"}
+                  variant={"link"}
+                  className="text-green-600 px-2"
+                  onClick={() => saveNewProductLabelHandler(product)}
+                >
+                  <CheckIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant={"link"}
+                  className="text-red-600 px-2"
+                  onClick={() => setEditLabel(false)}
+                >
+                  <XIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant={"link"}
+                className="text-black decoration-dotted underline p-0"
+                onClick={() => setEditLabel(true)}
+              >
+                {product.label}
+              </Button>
+            )}
+          </CardTitle>
           <CardDescription>
             {product.quantity} {product.quantityUnit}
           </CardDescription>
@@ -110,7 +162,7 @@ const Product = ({
           </DropdownMenu>
         </div>
       </CardHeader>
-    </Card>
+    </SwipeableCard>
   );
 };
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Product from "./product";
 import { ProductView } from "@/lib/types/ProductView";
 import { revalidatePath } from "next/cache";

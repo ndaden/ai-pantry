@@ -22,7 +22,7 @@ const PantryList = async () => {
 
   return data && data.length > 0 ? (
     <div>
-      {data.map((item) => {
+      {data.map((item: ProductView) => {
         return (
           <Product
             key={item.id}

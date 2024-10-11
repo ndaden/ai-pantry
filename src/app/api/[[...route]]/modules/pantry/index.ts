@@ -1,7 +1,5 @@
-import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
 import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { PrismaClient } from "@prisma/client";
 import Elysia, { t } from "elysia";
@@ -12,7 +10,7 @@ type App = Elysia<
   {
     decorator: { db: PrismaClient };
     store: {};
-    derive: { user: KindeUser | null };
+    derive: { user: KindeUser<any> | null };
     resolve: {};
   }
 >;

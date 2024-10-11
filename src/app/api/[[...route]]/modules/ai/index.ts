@@ -9,7 +9,7 @@ type App = Elysia<
   {
     decorator: { db: PrismaClient };
     store: {};
-    derive: { user: KindeUser | null };
+    derive: { user: KindeUser<any> | null };
     resolve: {};
   }
 >;

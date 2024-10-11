@@ -18,7 +18,7 @@ export interface AiProduct {
   quantityUnit: string;
 }
 
-const AddAiProducts = ({ user }: { user: KindeUser | null }) => {
+const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
   const { addAiProductsMutation } = useProductController({
     refreshProductList: () => Promise.resolve(),
   });

@@ -57,7 +57,7 @@ const CATEGORY_ICON = [
   },
 ] as const;
 
-const AddProduct = ({ user }: { user: KindeUser | null | undefined }) => {
+const AddProduct = ({ user }: { user: KindeUser<any> | null | undefined }) => {
   const [moreQuantity, setMoreQuantity] = useState(false);
 
   const {

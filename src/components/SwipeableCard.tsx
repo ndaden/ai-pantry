@@ -110,12 +110,16 @@ const SwipeableCard = ({
       >
         {children}
       </Card>
-      <div className="mx-1 leftSide absolute top-0 left-0 w-[50%] h-[100%] z-[-1] flex items-center bg-red-600  rounded-lg">
-        <TrashIcon className="h-10 w-10" />
-      </div>
-      <div className="mx-1 rightSide absolute top-0 right-0 w-[50%] h-[100%] z-[-1] flex items-center bg-green-600 rounded-lg">
-        <CheckIcon className="h-10 w-10" />
-      </div>
+      {onSwipeRight && (
+        <div className="mx-1 leftSide absolute top-0 left-0 w-[50%] h-[100%] z-[-1] flex items-center justify-start bg-green-600  rounded-lg">
+          <CheckIcon className="h-7 w-7 text-white" />
+        </div>
+      )}
+      {onSwipeLeft && (
+        <div className="mx-1 rightSide absolute top-0 right-0 w-[50%] h-[100%] z-[-1] flex items-center justify-end bg-red-600 rounded-lg pr-3">
+          <TrashIcon className="h-7 w-7 text-white" />
+        </div>
+      )}
     </div>
   );
 };

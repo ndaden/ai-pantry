@@ -1,27 +1,21 @@
 "use client";
 
 import { client } from "@/app/api/[[...route]]/client";
-import Dialog from "@/components/Dialog";
 import SwipeableCard from "@/components/SwipeableCard";
 import { Button } from "@/components/ui/button";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
-import { CheckIcon, ChevronDownIcon, CrossIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { CheckIcon, XIcon } from "lucide-react";
+import React, { useState } from "react";
 
 const Product = ({
   product,
@@ -31,6 +25,8 @@ const Product = ({
   refreshProductList: () => Promise<void>;
 }) => {
   const [isPendingDeleteProduct, setIsPendingDeleteProduct] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const { updateProductMutation, isPendingUpdateProduct } =
     useProductController({ refreshProductList });
 
@@ -85,13 +81,18 @@ const Product = ({
       <Skeleton className="h-10 w-[100%]"></Skeleton>
     </div>
   ) : (
-    <SwipeableCard key={product.id} className="relative my-1 p-0 bg-green-100">
+    <SwipeableCard
+      key={product.id}
+      className="relative my-1 p-0 bg-green-100"
+      onSwipeLeft={() => setShowDeleteDialog(true)}
+    >
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
           <CardTitle>
             {editLabel ? (
               <div className="flex space-x-0">
                 <Input
+                  className="bg-white"
                   defaultValue={product.label}
                   onChange={(e) => setNewProductLabel(e.target.value)}
                 />
@@ -142,26 +143,24 @@ const Product = ({
           >
             +
           </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} className="p-2">
-                <ChevronDownIcon size={20} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem className="p-0" asChild>
-                <Dialog
-                  message="Voulez vous vraiment supprimer"
-                  onConfirm={() => deleteProductHandler(product.id)}
-                >
-                  <Button className="w-full">Supprimer</Button>
-                </Dialog>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </CardHeader>
+      <Dialog
+        open={showDeleteDialog}
+        onOpenChange={(isOpen) => setShowDeleteDialog(isOpen)}
+      >
+        <DialogContent>
+          <div>Voulez-vous vraiment supprimer ce produit ?</div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={"secondary"}>Annuler</Button>
+            </DialogClose>
+            <Button onClick={() => deleteProductHandler(product.id)}>
+              Confirmer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SwipeableCard>
   );
 };

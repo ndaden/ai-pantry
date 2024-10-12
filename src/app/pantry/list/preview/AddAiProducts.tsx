@@ -66,6 +66,17 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
 
     setAiData(aiData);
   };
+
+  const onEditProductLabel = (product: AiProduct, newLabel: string) => {
+    const productIndex = aiData.findIndex((p) => p.id === product.id);
+
+    aiData[productIndex] = {
+      ...aiData[productIndex],
+      label: newLabel,
+    };
+
+    setAiData(aiData);
+  };
   const onDeleteProduct = (product: AiProduct) => {
     setAiData(aiData.filter((p) => p.id != product.id));
   };
@@ -83,6 +94,7 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
             onAddQuantity={onAddQuantity}
             onSubtractQuantity={onSubstractQuantity}
             onDeleteProduct={onDeleteProduct}
+            onEditProductLabel={onEditProductLabel}
           />
         );
       })}

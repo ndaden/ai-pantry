@@ -1,8 +1,10 @@
 import { Category } from "@/lib/types/Category";
 import { Product } from "@/lib/types/Product";
+import { ProductView } from "@/lib/types/ProductView";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { PrismaClient } from "@prisma/client";
 import Elysia, { t } from "elysia";
+import { groupBy } from "lodash";
 
 type App = Elysia<
   "",
@@ -20,12 +22,11 @@ export const pantryModule = (app: App) =>
     .group("/product", (app) =>
       app
         .get("/list", async ({ db, user, error }) => {
-          console.log(user);
           if (!user) {
             return error(401, "Unauthorized");
           }
 
-          return db.product.findMany({
+          const result = await db.product.findMany({
             select: {
               id: true,
               label: true,
@@ -40,6 +41,13 @@ export const pantryModule = (app: App) =>
               },
             },
           });
+
+          const resultGroupedByCategory = groupBy(
+            result,
+            ({ category: { label } }: ProductView) => label
+          );
+
+          return resultGroupedByCategory;
         })
         .post(
           "/batch-add",

@@ -7,6 +7,9 @@ import { client } from "@/app/api/[[...route]]/client";
 import { getAuthHeaders } from "@/lib/utils";
 import { cookies } from "next/headers";
 import EmptyProductList from "@/components/EmptyProductList";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 const PantryList = async () => {
   const { data } = await client.api.product.list.get({
@@ -20,17 +23,36 @@ const PantryList = async () => {
     revalidatePath("/pantry/list");
   };
 
-  return data && data.length > 0 ? (
+  const _data: Record<string, ProductView[]> = data;
+
+  const categories = Object.keys(_data);
+
+  return categories && categories.length > 0 ? (
     <div>
-      {data.map((item: ProductView) => {
-        return (
-          <Product
-            key={item.id}
-            product={item as ProductView}
-            refreshProductList={refreshProductList}
-          />
-        );
-      })}
+      <Link
+        href={"/pantry/start"}
+        className={buttonVariants({
+          size: "lg",
+          className: "flex md:hidden w-full my-3",
+        })}
+      >
+        <PlusIcon className="h-4 w-4 mr-2" /> Ajout produits
+      </Link>
+
+      {categories.map((category, idx) => (
+        <div key={idx}>
+          <div className="font-bold my-3">{category}</div>
+          {_data[category].map((item: ProductView) => {
+            return (
+              <Product
+                key={item.id}
+                product={item}
+                refreshProductList={refreshProductList}
+              />
+            );
+          })}
+        </div>
+      ))}
     </div>
   ) : (
     <EmptyProductList />

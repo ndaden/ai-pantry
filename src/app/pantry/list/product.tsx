@@ -9,13 +9,15 @@ import {
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLongPress } from "@/lib/hooks/useLongPress";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
 import { CheckIcon, XIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const Product = ({
   product,
@@ -24,6 +26,12 @@ const Product = ({
   product: ProductView;
   refreshProductList: () => Promise<void>;
 }) => {
+  const productRef = useRef();
+  const { hasPressed, setHasPressed } = useLongPress({
+    element: productRef.current,
+    duration: 2000,
+  });
+
   const [isPendingDeleteProduct, setIsPendingDeleteProduct] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -82,6 +90,7 @@ const Product = ({
     </div>
   ) : (
     <SwipeableCard
+      ref={productRef}
       key={product.id}
       className="relative my-1 p-0 bg-green-100"
       onSwipeLeft={() => setShowDeleteDialog(true)}
@@ -149,8 +158,8 @@ const Product = ({
         open={showDeleteDialog}
         onOpenChange={(isOpen) => setShowDeleteDialog(isOpen)}
       >
-        <DialogContent>
-          <div>Voulez-vous vraiment supprimer ce produit ?</div>
+        <DialogContent aria-description="delete product confirmation">
+          <DialogTitle>Voulez-vous vraiment supprimer ce produit ?</DialogTitle>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant={"secondary"}>Annuler</Button>
@@ -158,6 +167,22 @@ const Product = ({
             <Button onClick={() => deleteProductHandler(product.id)}>
               Confirmer
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={hasPressed}
+        onOpenChange={() => {
+          setHasPressed(false);
+        }}
+      >
+        <DialogContent aria-description="edit product properties">
+          <DialogTitle>Modifier : {product.label}</DialogTitle>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={"secondary"}>Annuler</Button>
+            </DialogClose>
           </DialogFooter>
         </DialogContent>
       </Dialog>

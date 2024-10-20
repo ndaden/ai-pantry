@@ -30,6 +30,7 @@ const Navbar = async () => {
                   href={"/pantry/start"}
                   className={buttonVariants({
                     size: "sm",
+                    className: "hidden md:flex",
                   })}
                 >
                   <PlusIcon className="h-4 w-4 mr-2" /> Ajout produits

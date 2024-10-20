@@ -17,7 +17,7 @@ import { useLongPress } from "@/lib/hooks/useLongPress";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
 import { CheckIcon, XIcon } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { LegacyRef, useRef, useState } from "react";
 
 const Product = ({
   product,
@@ -90,7 +90,6 @@ const Product = ({
     </div>
   ) : (
     <SwipeableCard
-      ref={productRef}
       key={product.id}
       className="relative my-1 p-0 bg-green-100"
       onSwipeLeft={() => setShowDeleteDialog(true)}
@@ -125,6 +124,7 @@ const Product = ({
               </div>
             ) : (
               <Button
+                ref={productRef as LegacyRef<any>}
                 variant={"link"}
                 className="text-black decoration-dotted underline p-0"
                 onClick={() => setEditLabel(true)}

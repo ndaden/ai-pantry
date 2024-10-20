@@ -27,12 +27,18 @@ export const useLongPress = ({
     if (element) {
       element.addEventListener("mousedown", onMouseDown);
       element.addEventListener("mouseup", onMouseUp);
+
+      element.addEventListener("touchstart", onMouseDown);
+      element.addEventListener("touchend", onMouseUp);
     }
 
     return () => {
       if (element) {
         element.removeEventListener("mousedown", onMouseDown);
         element.removeEventListener("mouseup", onMouseUp);
+
+        element.removeEventListener("touchstart", onMouseDown);
+        element.removeEventListener("touchend", onMouseUp);
       }
       clearTimeout(to);
     };

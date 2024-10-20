@@ -126,7 +126,7 @@ const Product = ({
               <Button
                 ref={productRef as LegacyRef<any>}
                 variant={"link"}
-                className="text-black decoration-dotted underline p-0"
+                className="text-black decoration-dotted underline p-0 select-none touch-none"
                 onClick={() => setEditLabel(true)}
               >
                 {product.label}

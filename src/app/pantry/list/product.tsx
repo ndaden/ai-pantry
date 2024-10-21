@@ -12,6 +12,13 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import useProductController from "@/lib/hooks/useProductController";
@@ -176,14 +183,18 @@ const Product = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog
+      <Drawer
         open={showEditDialog}
         onOpenChange={() => {
           setShowEditDialog(false);
         }}
+        disablePreventScroll={true}
       >
-        <DialogContent aria-description="edit product properties">
-          <DialogTitle>Modifier : {product.label}</DialogTitle>
+        <DrawerContent
+          aria-description="edit product properties"
+          className="w-[100%]"
+        >
+          <DrawerTitle>Modifier : {product.label}</DrawerTitle>
           <div>
             <ProductForm
               isSubmitLoading={false}
@@ -201,13 +212,13 @@ const Product = ({
             />
           </div>
 
-          <DialogFooter>
-            <DialogClose asChild>
+          <DrawerFooter>
+            <DrawerClose asChild>
               <Button variant={"secondary"}>Annuler</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </SwipeableCard>
   );
 };

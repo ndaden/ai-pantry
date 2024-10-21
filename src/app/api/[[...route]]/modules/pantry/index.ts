@@ -29,6 +29,7 @@ export const pantryModule = (app: App) =>
           const result = await db.product.findMany({
             select: {
               id: true,
+              userId: true,
               label: true,
               quantity: true,
               quantityUnit: true,

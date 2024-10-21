@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/app/api/[[...route]]/client";
+import ProductForm from "@/components/ProductForm";
 import SwipeableCard from "@/components/SwipeableCard";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,11 +14,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLongPress } from "@/lib/hooks/useLongPress";
 import useProductController from "@/lib/hooks/useProductController";
 import { ProductView } from "@/lib/types/ProductView";
 import { CheckIcon, XIcon } from "lucide-react";
-import React, { LegacyRef, useRef, useState } from "react";
+import React, { useState } from "react";
 
 const Product = ({
   product,
@@ -26,14 +26,9 @@ const Product = ({
   product: ProductView;
   refreshProductList: () => Promise<void>;
 }) => {
-  const productRef = useRef();
-  const { hasPressed, setHasPressed } = useLongPress({
-    element: productRef.current,
-    duration: 2000,
-  });
-
   const [isPendingDeleteProduct, setIsPendingDeleteProduct] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const { updateProductMutation, isPendingUpdateProduct } =
     useProductController({ refreshProductList });
@@ -84,6 +79,17 @@ const Product = ({
     setEditLabel(false);
   };
 
+  const onSaveEditProduct = (product: ProductView) => {
+    updateProductMutation({
+      id: product.id,
+      categoryId: product.categoryId,
+      label: product.label,
+      quantity: product.quantity,
+      quantityUnit: product.quantityUnit,
+      userId: product.userId,
+    });
+  };
+
   return isPendingDeleteProduct || isPendingUpdateProduct ? (
     <div className="mx-1 my-3">
       <Skeleton className="h-10 w-[100%]"></Skeleton>
@@ -93,6 +99,7 @@ const Product = ({
       key={product.id}
       className="relative my-1 p-0 bg-green-100"
       onSwipeLeft={() => setShowDeleteDialog(true)}
+      onSwipeRight={() => setShowEditDialog(true)}
     >
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
@@ -124,7 +131,6 @@ const Product = ({
               </div>
             ) : (
               <Button
-                ref={productRef as LegacyRef<any>}
                 variant={"link"}
                 className="text-black decoration-dotted underline p-0 select-none touch-none"
                 onClick={() => setEditLabel(true)}
@@ -133,7 +139,7 @@ const Product = ({
               </Button>
             )}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="select-none touch-none">
             {product.quantity} {product.quantityUnit}
           </CardDescription>
         </div>
@@ -171,13 +177,29 @@ const Product = ({
         </DialogContent>
       </Dialog>
       <Dialog
-        open={hasPressed}
+        open={showEditDialog}
         onOpenChange={() => {
-          setHasPressed(false);
+          setShowEditDialog(false);
         }}
       >
         <DialogContent aria-description="edit product properties">
           <DialogTitle>Modifier : {product.label}</DialogTitle>
+          <div>
+            <ProductForm
+              isSubmitLoading={false}
+              onSubmit={(productToEdit: ProductView) =>
+                onSaveEditProduct({ ...productToEdit, id: product.id })
+              }
+              defaultValues={{
+                label: product.label,
+                categoryId: product.categoryId,
+                userId: product.userId,
+                quantity: product.quantity,
+                quantityUnit: product.quantityUnit,
+              }}
+              isProductCreation={false}
+            />
+          </div>
 
           <DialogFooter>
             <DialogClose asChild>

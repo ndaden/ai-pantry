@@ -1,16 +1,18 @@
 import { Product } from "../types/Product";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 import { client } from "@/app/api/[[...route]]/client";
 import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
+import { useCategoryIndex } from "./useCategoryIndex";
 
 const useProductController = ({
   refreshProductList,
 }: {
   refreshProductList: () => Promise<void>;
 }) => {
+  const { categories, isLoadingCategories } = useCategoryIndex();
   const { toast } = useToast();
   const route = useRouter();
 
@@ -52,11 +54,6 @@ const useProductController = ({
       throw error;
     }
   };
-
-  const { data: categories, isLoading: isLoadingCategories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => client.api.category.list.get(),
-  });
 
   const { mutate: addProductMutation, isPending: isPendingAddProduct } =
     useMutation({

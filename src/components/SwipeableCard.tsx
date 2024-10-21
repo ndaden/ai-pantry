@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import { Card } from "./ui/card";
-import { CheckIcon, TrashIcon } from "lucide-react";
+import { SquarePenIcon, TrashIcon } from "lucide-react";
 
 interface SwipeableCardProps {
   children: ReactNode;
@@ -111,8 +111,8 @@ const SwipeableCard = forwardRef(
           {children}
         </Card>
         {onSwipeRight && (
-          <div className="mx-1 leftSide absolute top-0 left-0 w-[50%] h-[100%] z-[-1] flex items-center justify-start bg-green-600  rounded-lg">
-            <CheckIcon className="h-7 w-7 text-white" />
+          <div className="mx-1 leftSide absolute top-0 left-0 w-[50%] h-[100%] z-[-1] flex items-center justify-start bg-zinc-500 rounded-lg pl-3">
+            <SquarePenIcon className="h-7 w-7 text-white" />
           </div>
         )}
         {onSwipeLeft && (

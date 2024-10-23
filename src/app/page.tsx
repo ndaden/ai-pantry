@@ -16,7 +16,7 @@ const Page = async () => {
                   className="w-full"
                   width={250}
                   height={250}
-                  src="https://placehold.co/250x250.png"
+                  src="/images/placeholders/250x250.png"
                   alt="logo"
                 />
               </div>
@@ -52,35 +52,35 @@ const Page = async () => {
                     className="inline-block h-10 w-10 rounded-full ring-2 ring-slate-100"
                     width={40}
                     height={40}
-                    src="https://placehold.co/25x25.png"
+                    src="/images/placeholders/25x25.png"
                     alt="user image"
                   />
                   <Image
                     className="inline-block h-10 w-10 rounded-full ring-2 ring-slate-100"
                     width={40}
                     height={40}
-                    src="https://placehold.co/25x25.png"
+                    src="/images/placeholders/25x25.png"
                     alt="user image"
                   />
                   <Image
                     className="inline-block h-10 w-10 rounded-full ring-2 ring-slate-100"
                     width={40}
                     height={40}
-                    src="https://placehold.co/25x25.png"
+                    src="/images/placeholders/25x25.png"
                     alt="user image"
                   />
                   <Image
                     className="inline-block h-10 w-10 rounded-full ring-2 ring-slate-100"
                     width={40}
                     height={40}
-                    src="https://placehold.co/25x25.png"
+                    src="/images/placeholders/25x25.png"
                     alt="user image"
                   />
                   <Image
                     className="inline-block h-10 w-10 rounded-full ring-2 ring-slate-100"
                     width={40}
                     height={40}
-                    src="https://placehold.co/25x25.png"
+                    src="/images/placeholders/25x25.png"
                     alt="user image"
                   />
                 </div>

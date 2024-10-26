@@ -39,10 +39,12 @@ const SwipeableCard = forwardRef(
     const onMouseDownHandler: MouseEventHandler<HTMLDivElement> = (
       e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
     ) => {
+      e.preventDefault();
       setStartX(e.clientX);
     };
 
     const onMouseUpHandler: MouseEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
       if (translateX >= 25 && onSwipeRight) {
         onSwipeRight();
       }
@@ -54,6 +56,7 @@ const SwipeableCard = forwardRef(
     };
 
     const onMouseMoveHandler: MouseEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
       if (startX) {
         const currentX = e.clientX;
         const deltaX = currentX - startX;
@@ -66,10 +69,12 @@ const SwipeableCard = forwardRef(
     };
 
     const onTouchStartHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
       setStartX(e.touches[0].clientX);
     };
 
     const onTouchEndHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
       if (translateX >= 25 && onSwipeRight) {
         onSwipeRight();
       }
@@ -81,6 +86,7 @@ const SwipeableCard = forwardRef(
     };
 
     const onTouchMoveHandler: TouchEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
       if (startX) {
         const currentX = e.touches[0].clientX;
         const deltaX = currentX - startX;

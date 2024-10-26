@@ -28,7 +28,7 @@ const PantryList = async () => {
   const categories = Object.keys(_data);
 
   return categories && categories.length > 0 ? (
-    <div>
+    <div className="overflow-x-hidden">
       <Link
         href={"/pantry/start"}
         className={buttonVariants({

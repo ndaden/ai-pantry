@@ -26,7 +26,10 @@ import { Product } from "@/lib/types/Product";
 
 const pantryFormSchema = z.object({
   userId: z.string(),
-  label: z.string().min(3).max(50),
+  label: z
+    .string()
+    .min(3, "Vous devez saisir un libellé. Entre 3 et 50 caractères")
+    .max(50),
   categoryId: z.string().min(24), // ObjectId
   quantityUnit: z.nativeEnum(QuantityUnit),
   quantity: z.number().min(1).max(100).describe("toto"),

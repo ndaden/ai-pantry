@@ -194,8 +194,8 @@ const Product = ({
           aria-description="edit product properties"
           className="w-[100%]"
         >
-          <DrawerTitle>Modifier : {product.label}</DrawerTitle>
-          <div>
+          <DrawerTitle></DrawerTitle>
+          <div className="mx-3 mt-3">
             <ProductForm
               isSubmitLoading={false}
               onSubmit={(productToEdit: ProductView) =>

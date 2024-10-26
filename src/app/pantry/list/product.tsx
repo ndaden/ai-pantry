@@ -104,7 +104,7 @@ const Product = ({
   ) : (
     <SwipeableCard
       key={product.id}
-      className="relative my-1 p-0 bg-green-100"
+      className="relative my-1 p-0 bg-gradient-to-br from-green-100"
       onSwipeLeft={() => setShowDeleteDialog(true)}
       onSwipeRight={() => setShowEditDialog(true)}
     >

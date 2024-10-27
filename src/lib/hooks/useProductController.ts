@@ -31,6 +31,7 @@ const useProductController = ({
   const addAiProduct = async (products: AiProduct[]) => {
     try {
       const { data, error } = await client.api.product["ai-add"].post(products);
+      console.log({ data, error });
       if (error) {
         throw error;
       }
@@ -77,7 +78,7 @@ const useProductController = ({
     isPending: isPendingAddAiProductsMutation,
   } = useMutation({
     mutationFn: addAiProduct,
-    onError: (error) => alert(error.message),
+    onError: (error) => console.log(error),
     onSuccess: (data) => {
       toast({
         title: "Vos produits ont été ajoutés avec succés.",

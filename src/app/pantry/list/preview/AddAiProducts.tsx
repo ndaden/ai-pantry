@@ -34,6 +34,7 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
   const handleValidateAndAdd = async () => {
     const aiProductsToAdd = aiData.map((product) => ({
       ...product,
+      quantity: Number(product.quantity),
       userId: user?.id || "",
     }));
 

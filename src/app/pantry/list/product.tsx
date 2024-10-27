@@ -59,6 +59,10 @@ const Product = ({
   };
 
   const subtractQuantityHandler = (product: ProductView) => {
+    if (product.quantity === 1) {
+      setShowDeleteDialog(true);
+    }
+
     if (product.quantity > 1) {
       updateProductMutation({
         id: product.id,
@@ -97,9 +101,12 @@ const Product = ({
     });
   };
 
-  return isPendingDeleteProduct || isPendingUpdateProduct ? (
+  return isPendingUpdateProduct ? (
     <div className="mx-1 my-3">
-      <Skeleton className="h-10 w-[100%]"></Skeleton>
+      <Skeleton className="h-20 w-[100%] bg-gradient-to-br from-green-100 p-5 space-y-2">
+        <Skeleton className="h-5 w-16" />
+        <Skeleton className="h-5 w-5" />
+      </Skeleton>
     </div>
   ) : (
     <SwipeableCard
@@ -198,9 +205,10 @@ const Product = ({
           <div className="mx-3 mt-3">
             <ProductForm
               isSubmitLoading={false}
-              onSubmit={(productToEdit: ProductView) =>
-                onSaveEditProduct({ ...productToEdit, id: product.id })
-              }
+              onSubmit={(productToEdit: ProductView) => {
+                onSaveEditProduct({ ...productToEdit, id: product.id });
+                setShowEditDialog(false);
+              }}
               defaultValues={{
                 label: product.label,
                 categoryId: product.categoryId,

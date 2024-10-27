@@ -18,10 +18,9 @@ import { Input } from "./ui/input";
 import { Field, Radio, RadioGroup } from "@headlessui/react";
 import { cn } from "@/lib/utils";
 import { CATEGORY_ICON } from "@/app/appConstants";
-import { QUANTITIES, UNITS } from "@/app/pantry/add/constants";
+import { UNITS } from "@/app/pantry/add/constants";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
 import { Product } from "@/lib/types/Product";
 
 const pantryFormSchema = z.object({
@@ -48,7 +47,6 @@ const ProductForm = ({
   isSubmitLoading,
   isProductCreation,
 }: ProductFormProps) => {
-  const [moreQuantity, setMoreQuantity] = useState(false);
   const { categories, isLoadingCategories } = useCategoryIndex();
 
   const form = useForm<z.infer<typeof pantryFormSchema>>({
@@ -61,6 +59,13 @@ const ProductForm = ({
       quantity: defaultValues?.quantity || 1,
     },
   });
+
+  const editQuantityHandler = (event: Event, quantity: number) => {
+    event.preventDefault();
+
+    if (form.getValues().quantity + quantity > 0)
+      form.setValue("quantity", form.getValues().quantity + quantity);
+  };
 
   return isLoadingCategories ? (
     <LoadingAddProduct />
@@ -153,69 +158,39 @@ const ProductForm = ({
           )}
         ></FormField>
         <div className="flex justify-center items-baseline">
-          {!moreQuantity && (
-            <FormField
-              control={form.control}
-              name="quantity"
-              render={({ field }) => (
-                <RadioGroup {...field}>
-                  <Field className="flex flex-wrap justify-center gap-3 mt-5">
-                    {QUANTITIES.map((quantity) => {
-                      return (
-                        <Radio
-                          key={quantity.value}
-                          value={quantity.value}
-                          className={({ checked, hover }) =>
-                            cn(
-                              "flex items-center transition relative p-3 w-fit shadow-xl rounded-2xl border border-zinc-400",
-                              { "border-black": hover },
-                              {
-                                "bg-green-600 text-white border-0": checked,
-                              }
-                            )
-                          }
-                        >
-                          <span className="text-sm">{quantity.name}</span>
-                        </Radio>
-                      );
-                    })}
-                  </Field>
-                </RadioGroup>
-              )}
-            ></FormField>
-          )}
-          {moreQuantity && (
-            <FormField
-              control={form.control}
-              name="quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Saisir la quantité"
-                      className="h-10 text-lg shadow-lg border-zinc-400 w-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      type="number"
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      onBlur={field.onBlur}
-                      value={Number.parseInt(`${field.value}`)}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-          <Button
-            type="button"
-            onClick={() => {
-              setMoreQuantity((prev) => !prev);
-            }}
-            variant={"outline"}
-            className="ml-3 h-13 py-3 border rounded-2xl border-zinc-400 shadow-lg"
-          >
-            {moreQuantity ? "x" : "Plus"}
-          </Button>
+          <FormField
+            control={form.control}
+            name="quantity"
+            render={({ field }) => (
+              <FormItem className="flex justify-end space-x-4">
+                <Button
+                  className="h-10 self-end bg-green-600"
+                  onClick={(e) =>
+                    editQuantityHandler(e as unknown as Event, -1)
+                  }
+                >
+                  -
+                </Button>
+                <FormControl>
+                  <Input
+                    placeholder="Saisir la quantité"
+                    className="h-10 text-lg shadow-lg border-zinc-400 w-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    type="number"
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onBlur={field.onBlur}
+                    value={Number.parseInt(`${field.value}`)}
+                  />
+                </FormControl>
+                <Button
+                  className="h-10 self-end bg-green-600"
+                  onClick={(e) => editQuantityHandler(e as unknown as Event, 1)}
+                >
+                  +
+                </Button>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <Button type="submit" className="sm:w-fit w-full" size={"lg"}>

@@ -60,12 +60,14 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
   const onSubstractQuantity = (product: AiProduct) => {
     const productIndex = aiData.findIndex((p) => p.id === product.id);
 
-    aiData[productIndex] = {
-      ...aiData[productIndex],
-      quantity: Number(aiData[productIndex].quantity) - 1,
-    };
+    if (Number(aiData[productIndex].quantity) > 1) {
+      aiData[productIndex] = {
+        ...aiData[productIndex],
+        quantity: Number(aiData[productIndex].quantity) - 1,
+      };
 
-    setAiData(aiData);
+      setAiData(aiData);
+    }
   };
 
   const onEditProductLabel = (product: AiProduct, newLabel: string) => {
@@ -78,6 +80,15 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
 
     setAiData(aiData);
   };
+
+  const onEditProduct = (product: AiProduct) => {
+    const productIndex = aiData.findIndex((p) => p.id === product.id);
+
+    aiData[productIndex] = { ...product };
+
+    setAiData(aiData);
+  };
+
   const onDeleteProduct = (product: AiProduct) => {
     setAiData(aiData.filter((p) => p.id != product.id));
   };
@@ -85,7 +96,7 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
   return (
     <div>
       <div className="my-6 font-semibold flex justify-center">
-        Suggested products
+        Produits suggérés
       </div>
       {aiData.map((aiProduct) => {
         return (
@@ -96,11 +107,12 @@ const AddAiProducts = ({ user }: { user: KindeUser<any> | null }) => {
             onSubtractQuantity={onSubstractQuantity}
             onDeleteProduct={onDeleteProduct}
             onEditProductLabel={onEditProductLabel}
+            onEditProduct={onEditProduct}
           />
         );
       })}
       <Button onClick={handleValidateAndAdd} className="w-full my-4">
-        Add products
+        Ajouter les produits
       </Button>
     </div>
   );

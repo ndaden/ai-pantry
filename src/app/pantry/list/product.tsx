@@ -206,12 +206,16 @@ const Product = ({
             <ProductForm
               isSubmitLoading={false}
               onSubmit={(productToEdit: ProductView) => {
-                onSaveEditProduct({ ...productToEdit, id: product.id });
+                onSaveEditProduct({
+                  ...productToEdit,
+                  id: product.id,
+                  categoryId: productToEdit.category.id,
+                });
                 setShowEditDialog(false);
               }}
               defaultValues={{
                 label: product.label,
-                categoryId: product.categoryId,
+                category: { id: product.categoryId, label: "" },
                 userId: product.userId,
                 quantity: product.quantity,
                 quantityUnit: product.quantityUnit,

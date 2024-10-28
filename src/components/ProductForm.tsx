@@ -22,6 +22,8 @@ import { UNITS } from "@/app/pantry/add/constants";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { Product } from "@/lib/types/Product";
+import { AiProduct } from "@/app/pantry/list/preview/AddAiProducts";
+import { Category } from "@/lib/types/Category";
 
 const pantryFormSchema = z.object({
   userId: z.string(),
@@ -29,13 +31,13 @@ const pantryFormSchema = z.object({
     .string()
     .min(3, "Vous devez saisir un libellé. Entre 3 et 50 caractères")
     .max(50),
-  categoryId: z.string().min(24), // ObjectId
+  category: z.object({ id: z.string().min(24), label: z.string() }), // ObjectId
   quantityUnit: z.nativeEnum(QuantityUnit),
   quantity: z.number().min(1).max(100).describe("toto"),
 });
 
 interface ProductFormProps {
-  defaultValues?: Product;
+  defaultValues?: Product | AiProduct;
   onSubmit: SubmitHandler<Product> | ((params: any) => void);
   isSubmitLoading: boolean;
   isProductCreation: boolean;
@@ -49,13 +51,23 @@ const ProductForm = ({
 }: ProductFormProps) => {
   const { categories, isLoadingCategories } = useCategoryIndex();
 
+  const categoryFromLabel = ((categories?.data as Category[]) || []).find(
+    (c) => c.label === (defaultValues as AiProduct)?.category
+  );
+
+  const categoryFromId = ((categories?.data as Category[]) || []).find(
+    (c) => c.id === (defaultValues as Product)?.category?.id
+  );
+
   const form = useForm<z.infer<typeof pantryFormSchema>>({
     resolver: zodResolver(pantryFormSchema),
     defaultValues: {
       userId: defaultValues?.userId || "",
       label: defaultValues?.label || "",
-      categoryId: defaultValues?.categoryId || "",
-      quantityUnit: defaultValues?.quantityUnit || QuantityUnit.Piece,
+      category: categoryFromId || categoryFromLabel || { id: "", label: "" },
+      quantityUnit:
+        (defaultValues?.quantityUnit as unknown as QuantityUnit) ||
+        QuantityUnit.Piece,
       quantity: defaultValues?.quantity || 1,
     },
   });
@@ -93,7 +105,7 @@ const ProductForm = ({
 
         <FormField
           control={form.control}
-          name="categoryId"
+          name="category"
           render={({ field }) => (
             <RadioGroup {...field}>
               <FormLabel className="">Catégorie</FormLabel>
@@ -103,7 +115,7 @@ const ProductForm = ({
                     return (
                       <Radio
                         key={categorie.id}
-                        value={categorie.id}
+                        value={categorie}
                         className={({ checked, hover }) =>
                           cn(
                             "flex items-center transition relative p-3 w-fit shadow-xl rounded-2xl border border-zinc-400",

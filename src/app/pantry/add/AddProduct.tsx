@@ -12,7 +12,11 @@ const AddProduct = ({ user }: { user: KindeUser<any> | null | undefined }) => {
   });
 
   const onSubmit: SubmitHandler<Product> = (product) => {
-    addProductMutation({ ...product, userId: user?.id || "" });
+    addProductMutation({
+      ...product,
+      categoryId: product.category.id,
+      userId: user?.id || "",
+    });
   };
 
   return (

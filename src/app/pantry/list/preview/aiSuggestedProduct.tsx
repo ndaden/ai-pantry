@@ -13,6 +13,16 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import ProductForm from "@/components/ProductForm";
+import { ProductView } from "@/lib/types/ProductView";
+import { QuantityUnit } from "@/lib/types/QuantityUnit";
 
 const AiSuggestedProduct = ({
   product,
@@ -20,22 +30,29 @@ const AiSuggestedProduct = ({
   onSubtractQuantity,
   onDeleteProduct,
   onEditProductLabel,
+  onEditProduct,
 }: {
   product: AiProduct;
   onAddQuantity: (p: AiProduct) => void;
   onSubtractQuantity: (p: AiProduct) => void;
   onDeleteProduct: (p: AiProduct) => void;
   onEditProductLabel: (p: AiProduct, newLabel: string) => void;
+  onEditProduct: (p: AiProduct) => void;
 }) => {
   const [editLabel, setEditLabel] = useState<boolean>(false);
   const [newProductLabel, setNewProductLabel] = useState<string>("");
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   return (
-    <SwipeableCard className="relative my-1 p-0 bg-green-100/50">
+    <SwipeableCard
+      className="relative my-1 p-0 bg-gradient-to-br from-blue-100"
+      onSwipeLeft={() => setShowDeleteDialog(true)}
+      onSwipeRight={() => setShowEditDialog(true)}
+    >
       <CardHeader className="flex flex-row justify-between items-center p-3">
         <div>
           <CardTitle>
-            <SparklesIcon className="h-4 w-4 inline mr-3 text-zinc-400" />
+            <SparklesIcon className="h-4 w-4 inline mr-3 text-blue-400" />
             {editLabel ? (
               <div className="flex space-x-0">
                 <Input
@@ -110,6 +127,48 @@ const AiSuggestedProduct = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Drawer
+        open={showEditDialog}
+        onOpenChange={() => {
+          setShowEditDialog(false);
+        }}
+        disablePreventScroll={true}
+      >
+        <DrawerContent
+          aria-description="edit product properties"
+          className="w-[100%]"
+        >
+          <DrawerTitle></DrawerTitle>
+          <div className="mx-3 mt-3">
+            <ProductForm
+              isSubmitLoading={false}
+              onSubmit={(productToEdit: ProductView) => {
+                console.log(productToEdit);
+                onEditProduct({
+                  ...productToEdit,
+                  id: product.id,
+                  category: productToEdit.category.label,
+                });
+                setShowEditDialog(false);
+              }}
+              defaultValues={{
+                label: product.label,
+                category: product.category,
+                userId: product.userId,
+                quantity: Number(product.quantity),
+                quantityUnit: product.quantityUnit as unknown as QuantityUnit,
+              }}
+              isProductCreation={false}
+            />
+          </div>
+
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant={"secondary"}>Annuler</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </SwipeableCard>
   );
 };

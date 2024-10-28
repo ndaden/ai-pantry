@@ -1,5 +1,5 @@
 import { Category } from "@/lib/types/Category";
-import { Product } from "@/lib/types/Product";
+import { Product, ProductToCreate } from "@/lib/types/Product";
 import { ProductView } from "@/lib/types/ProductView";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import { PrismaClient } from "@prisma/client";
@@ -57,7 +57,9 @@ export const pantryModule = (app: App) =>
               return error(401, "Unauthorized");
             }
 
-            return db.product.createMany({ data: body as Product[] });
+            return db.product.createMany({
+              data: body as Product[],
+            });
           },
           {
             body: t.Array(
@@ -79,7 +81,7 @@ export const pantryModule = (app: App) =>
             }
 
             return db.product.create({
-              data: body as Product,
+              data: body as ProductToCreate,
             });
           },
           {
@@ -144,7 +146,7 @@ export const pantryModule = (app: App) =>
 
             return db.product.update({
               where: { id: params.id },
-              data: body as Product,
+              data: body as ProductToCreate,
             });
           },
           {

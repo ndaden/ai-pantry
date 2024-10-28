@@ -4,7 +4,7 @@ import { QuantityUnit } from "./QuantityUnit";
 export interface Product {
   id?: string;
   userId: string;
-  category?: Category;
+  category: Category;
   categoryId: string;
   label: string;
   quantity: number;

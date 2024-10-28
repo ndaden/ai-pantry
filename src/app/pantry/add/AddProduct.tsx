@@ -14,7 +14,7 @@ const AddProduct = ({ user }: { user: KindeUser<any> | null | undefined }) => {
   const onSubmit: SubmitHandler<Product> = (product) => {
     addProductMutation({
       ...product,
-      categoryId: product.category.id,
+      categoryId: product.category.id || "",
       userId: user?.id || "",
     });
   };

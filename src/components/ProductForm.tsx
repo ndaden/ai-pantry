@@ -38,7 +38,7 @@ const pantryFormSchema = z.object({
 
 interface ProductFormProps {
   defaultValues?: Product | AiProduct;
-  onSubmit: SubmitHandler<Product> | ((params: any) => void);
+  onSubmit: SubmitHandler<any> | ((params: any) => void);
   isSubmitLoading: boolean;
   isProductCreation: boolean;
 }

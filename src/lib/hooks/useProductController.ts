@@ -1,4 +1,4 @@
-import { Product } from "../types/Product";
+import { Product, ProductToCreate } from "../types/Product";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ const useProductController = ({
     }
   };
 
-  const updateProduct = async (product: Product) => {
+  const updateProduct = async (product: ProductToCreate) => {
     try {
       const { id, ...productWithoutId } = product;
       const { data, error } = await client.api

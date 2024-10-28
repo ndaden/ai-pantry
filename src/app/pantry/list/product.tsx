@@ -22,11 +22,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import useProductController from "@/lib/hooks/useProductController";
+import { Product } from "@/lib/types/Product";
 import { ProductView } from "@/lib/types/ProductView";
 import { CheckIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
 
-const Product = ({
+const ProductComponent = ({
   product,
   refreshProductList,
 }: {
@@ -213,13 +214,15 @@ const Product = ({
                 });
                 setShowEditDialog(false);
               }}
-              defaultValues={{
-                label: product.label,
-                category: { id: product.categoryId, label: "" },
-                userId: product.userId,
-                quantity: product.quantity,
-                quantityUnit: product.quantityUnit,
-              }}
+              defaultValues={
+                {
+                  label: product.label,
+                  category: { id: product.categoryId, label: "" },
+                  userId: product.userId,
+                  quantity: product.quantity,
+                  quantityUnit: product.quantityUnit,
+                } as Product
+              }
               isProductCreation={false}
             />
           </div>
@@ -235,4 +238,4 @@ const Product = ({
   );
 };
 
-export default Product;
+export default ProductComponent;
